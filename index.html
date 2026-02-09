@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="AIVANTA - AI Automation That Actually Works. Talk to Alex, our AI automation specialist.">
+  <meta name="theme-color" content="#0f172a">
+  <title>AIVANTA | AI Automation That Actually Works</title>
+
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+  <!-- ================================================
+       HERO / LANDING SCREEN
+       ================================================ -->
+  <section id="hero" class="screen active" aria-label="Welcome to AIVANTA">
+    <!-- Animated background gradient orbs -->
+    <div class="bg-orbs" aria-hidden="true">
+      <div class="orb orb-1"></div>
+      <div class="orb orb-2"></div>
+      <div class="orb orb-3"></div>
+    </div>
+
+    <div class="hero-content">
+      <h1 class="logo" aria-label="AIVANTA">AIVANTA</h1>
+      <p class="tagline">AI Automation That Actually Works</p>
+      <p class="subtitle">
+        Talk to <strong>Alex</strong>, our AI automation specialist. Get instant
+        answers about how automation can save your business 50+ hours per week.
+      </p>
+
+      <div class="cta-buttons" role="group" aria-label="Choose how to chat">
+        <button id="btn-text-chat" class="cta cta-text" aria-label="Start text chat with Alex">
+          <span class="cta-icon" aria-hidden="true">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/>
+            </svg>
+          </span>
+          <span class="cta-label">
+            <span class="cta-title">Text Chat</span>
+            <span class="cta-desc">Type your questions</span>
+          </span>
+        </button>
+
+        <button id="btn-voice-chat" class="cta cta-voice" aria-label="Start voice chat with Alex">
+          <span class="cta-icon" aria-hidden="true">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"/>
+              <path d="M19 10v2a7 7 0 0 1-14 0v-2"/>
+              <line x1="12" y1="19" x2="12" y2="23"/>
+              <line x1="8" y1="23" x2="16" y2="23"/>
+            </svg>
+          </span>
+          <span class="cta-label">
+            <span class="cta-title">Voice Chat</span>
+            <span class="cta-desc">Talk to Alex live</span>
+          </span>
+        </button>
+      </div>
+
+      <p class="trust-line">No signup required &middot; Free consultation &middot; Real answers in seconds</p>
+    </div>
+  </section>
+
+  <!-- ================================================
+       TEXT CHAT SCREEN
+       ================================================ -->
+  <section id="text-chat" class="screen" aria-label="Text chat with Alex">
+    <div class="chat-container glass-card">
+      <!-- Header -->
+      <header class="chat-header">
+        <div class="chat-header-left">
+          <div class="avatar" aria-hidden="true">A</div>
+          <div class="chat-header-info">
+            <h2>Alex</h2>
+            <span class="status-dot online" aria-label="Online"></span>
+            <span class="status-text">AI Automation Specialist</span>
+          </div>
+        </div>
+        <div class="chat-header-actions">
+          <button id="btn-clear-chat" class="icon-btn" aria-label="Clear conversation" title="Clear conversation">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/>
+            </svg>
+          </button>
+          <button id="btn-copy-chat" class="icon-btn" aria-label="Copy conversation" title="Copy conversation">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <rect x="9" y="9" width="13" height="13" rx="2" ry="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/>
+            </svg>
+          </button>
+          <button id="btn-close-text" class="icon-btn" aria-label="Close chat" title="Back to home">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/>
+            </svg>
+          </button>
+        </div>
+      </header>
+
+      <!-- Messages area -->
+      <div id="chat-messages" class="chat-messages" role="log" aria-live="polite" aria-label="Chat messages">
+        <!-- Messages injected by JS -->
+      </div>
+
+      <!-- Typing indicator -->
+      <div id="typing-indicator" class="typing-indicator hidden" aria-label="Alex is typing">
+        <div class="avatar avatar-sm" aria-hidden="true">A</div>
+        <div class="typing-dots">
+          <span></span><span></span><span></span>
+        </div>
+      </div>
+
+      <!-- Input area -->
+      <form id="chat-form" class="chat-input-area" autocomplete="off">
+        <label for="chat-input" class="sr-only">Type your message</label>
+        <input
+          id="chat-input"
+          type="text"
+          placeholder="Type your message..."
+          aria-label="Type your message"
+          maxlength="2000"
+        />
+        <button type="submit" id="btn-send" class="send-btn" aria-label="Send message" disabled>
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/>
+          </svg>
+        </button>
+      </form>
+    </div>
+  </section>
+
+  <!-- ================================================
+       VOICE CHAT SCREEN (Placeholder UI)
+       ================================================ -->
+  <section id="voice-chat" class="screen" aria-label="Voice chat with Alex">
+    <div class="voice-container glass-card">
+      <!-- Header -->
+      <header class="chat-header">
+        <div class="chat-header-left">
+          <div class="avatar" aria-hidden="true">A</div>
+          <div class="chat-header-info">
+            <h2>Alex</h2>
+            <span class="status-text">Voice Assistant</span>
+          </div>
+        </div>
+        <button id="btn-close-voice" class="icon-btn" aria-label="Close voice chat" title="Back to home">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/>
+          </svg>
+        </button>
+      </header>
+
+      <!-- Visualizer -->
+      <div class="voice-visualizer-wrap">
+        <canvas id="voice-canvas" width="300" height="300" aria-hidden="true"></canvas>
+        <p id="voice-status" class="voice-status">Ready</p>
+      </div>
+
+      <!-- Mic button -->
+      <div class="voice-controls">
+        <button id="btn-mic" class="mic-btn" aria-label="Toggle microphone">
+          <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"/>
+            <path d="M19 10v2a7 7 0 0 1-14 0v-2"/>
+            <line x1="12" y1="19" x2="12" y2="23"/>
+            <line x1="8" y1="23" x2="16" y2="23"/>
+          </svg>
+        </button>
+      </div>
+
+      <!-- Transcript -->
+      <div class="voice-transcript" aria-label="Conversation transcript">
+        <h3>Transcript</h3>
+        <div id="voice-transcript-messages">
+          <p class="voice-placeholder">Press the microphone button to start talking with Alex.</p>
+          <p class="voice-coming-soon">Voice chat is coming soon. Use text chat for now!</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Toast notifications -->
+  <div id="toast-container" class="toast-container" aria-live="assertive"></div>
+
+  <script src="script.js"></script>
+</body>
+</html>
