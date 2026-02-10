@@ -40,6 +40,21 @@ const state = {
   },
 };
 
+// ----- Audio Context (must be created during user gesture to bypass autoplay policy) -----
+let audioCtx = null;
+
+function ensureAudioContext() {
+  if (!audioCtx) {
+    audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+    debug('AudioContext created, state:', audioCtx.state);
+  }
+  if (audioCtx.state === 'suspended') {
+    audioCtx.resume();
+    debug('AudioContext resumed');
+  }
+  return audioCtx;
+}
+
 // ----- DOM References -----
 const dom = {};
 
@@ -115,6 +130,11 @@ function openScreen(name) {
 
   if (name === 'text') {
     setTimeout(() => dom.chatInput.focus(), 350);
+  }
+
+  // Unlock AudioContext on user gesture (must happen during click, before async work)
+  if (name === 'voice') {
+    ensureAudioContext();
   }
 
   // Voice greeting: when opening voice chat for the first time, AI initiates
@@ -354,6 +374,7 @@ async function fetchVoiceGreeting() {
 }
 
 async function handleMicClick() {
+  ensureAudioContext(); // keep AudioContext alive on each user gesture
   const v = state.voice;
 
   if (v.status === 'processing' || v.status === 'speaking') {
@@ -469,30 +490,31 @@ async function sendVoiceMessage(audioBlob) {
 }
 
 function playAudio(blob) {
-  return new Promise((resolve, reject) => {
-    const url = URL.createObjectURL(blob);
-    const audio = new Audio(url);
-    setVoiceStatus('speaking');
+  return new Promise(async (resolve, reject) => {
+    try {
+      const ctx = ensureAudioContext();
+      const arrayBuffer = await blob.arrayBuffer();
+      const audioBuffer = await ctx.decodeAudioData(arrayBuffer);
 
-    audio.onended = () => {
-      URL.revokeObjectURL(url);
-      setVoiceStatus('idle');
-      resolve();
-    };
-    audio.onerror = (e) => {
-      URL.revokeObjectURL(url);
-      setVoiceStatus('idle');
+      const source = ctx.createBufferSource();
+      source.buffer = audioBuffer;
+      source.connect(ctx.destination);
+
+      setVoiceStatus('speaking');
+
+      source.onended = () => {
+        setVoiceStatus('idle');
+        resolve();
+      };
+
+      source.start(0);
+      debug('Audio playing via AudioContext, duration:', audioBuffer.duration.toFixed(1) + 's');
+    } catch (e) {
       debug('Audio playback error:', e);
-      reject(e);
-    };
-
-    audio.play().catch((e) => {
-      URL.revokeObjectURL(url);
       setVoiceStatus('idle');
-      debug('Audio play() failed:', e);
       showToast('Could not play audio response.', 'error');
       reject(e);
-    });
+    }
   });
 }
 
