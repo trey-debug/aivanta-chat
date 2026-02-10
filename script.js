@@ -117,6 +117,11 @@ function openScreen(name) {
     setTimeout(() => dom.chatInput.focus(), 350);
   }
 
+  // Voice greeting: when opening voice chat for the first time, AI initiates
+  if (name === 'voice' && state.voice.transcript.length === 0) {
+    fetchVoiceGreeting();
+  }
+
   // Render restored messages when opening text chat
   if (name === 'text' && state.messages.length > 0 && dom.chatMessages.children.length === 0) {
     renderAllMessages();
@@ -300,6 +305,53 @@ function restoreSession() {
 // ============================
 // VOICE CHAT
 // ============================
+
+async function fetchVoiceGreeting() {
+  setVoiceStatus('processing');
+  dom.btnMic.disabled = true;
+
+  try {
+    debug('Voice greeting → requesting');
+
+    const res = await fetch(CONFIG.VOICE_WEBHOOK_URL, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'X-Session-Id': state.sessionId,
+      },
+      body: JSON.stringify({
+        action: 'greeting',
+        sessionId: state.sessionId,
+      }),
+    });
+
+    if (!res.ok) throw new Error(`Greeting webhook status ${res.status}`);
+
+    const contentType = res.headers.get('content-type') || '';
+    debug('Greeting response content-type:', contentType);
+
+    if (contentType.includes('audio')) {
+      const audioArrayBuffer = await res.arrayBuffer();
+      const audioResponseBlob = new Blob([audioArrayBuffer], { type: 'audio/mpeg' });
+      addVoiceTranscript('alex', '(greeting)');
+      await playAudio(audioResponseBlob);
+    } else {
+      // Fallback: JSON text response
+      const data = await res.json();
+      const text = data.response || data.output || data.text ||
+        "Hi, I'm Alex from AIVANTA. How can I help you today?";
+      addVoiceTranscript('alex', text);
+    }
+
+    setVoiceStatus('idle');
+  } catch (err) {
+    debug('Greeting error:', err);
+    setVoiceStatus('idle');
+    // Silent fail — user can still tap mic to start talking
+  } finally {
+    dom.btnMic.disabled = false;
+  }
+}
 
 async function handleMicClick() {
   const v = state.voice;
