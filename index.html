@@ -135,7 +135,7 @@
   </section>
 
   <!-- ================================================
-       VOICE CHAT SCREEN (Placeholder UI)
+       VOICE CHAT SCREEN
        ================================================ -->
   <section id="voice-chat" class="screen" aria-label="Voice chat with Alex">
     <div class="voice-container glass-card">
@@ -145,6 +145,7 @@
           <div class="avatar" aria-hidden="true">A</div>
           <div class="chat-header-info">
             <h2>Alex</h2>
+            <span id="voice-online-dot" class="status-dot online" aria-label="Online"></span>
             <span class="status-text">Voice Assistant</span>
           </div>
         </div>
@@ -158,27 +159,27 @@
       <!-- Visualizer -->
       <div class="voice-visualizer-wrap">
         <canvas id="voice-canvas" width="300" height="300" aria-hidden="true"></canvas>
-        <p id="voice-status" class="voice-status">Ready</p>
+        <p id="voice-status" class="voice-status">Tap the mic to speak</p>
       </div>
 
       <!-- Mic button -->
       <div class="voice-controls">
-        <button id="btn-mic" class="mic-btn" aria-label="Toggle microphone">
-          <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <button id="btn-mic" class="mic-btn" aria-label="Hold to record, release to send">
+          <svg id="mic-icon" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
             <path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"/>
             <path d="M19 10v2a7 7 0 0 1-14 0v-2"/>
             <line x1="12" y1="19" x2="12" y2="23"/>
             <line x1="8" y1="23" x2="16" y2="23"/>
           </svg>
         </button>
+        <p class="mic-hint" id="mic-hint">Tap to start recording</p>
       </div>
 
       <!-- Transcript -->
       <div class="voice-transcript" aria-label="Conversation transcript">
         <h3>Transcript</h3>
         <div id="voice-transcript-messages">
-          <p class="voice-placeholder">Press the microphone button to start talking with Alex.</p>
-          <p class="voice-coming-soon">Voice chat is coming soon. Use text chat for now!</p>
+          <p class="voice-placeholder" id="voice-placeholder">Your conversation with Alex will appear here.</p>
         </div>
       </div>
     </div>
