@@ -187,6 +187,8 @@ function init() {
   initScrollAnimations();
   initNavScroll();
   initHeroParticles();
+  initLazyVideos();
+  initParallax();
   drawIdleCanvas();
 }
 
@@ -394,6 +396,81 @@ function initHeroParticles() {
     resize();
     createParticles();
   });
+}
+
+// ============================
+// PARALLAX SCROLL (cinematic images)
+// ============================
+function initParallax() {
+  if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+
+  const imgs = document.querySelectorAll('.parallax-img');
+  if (!imgs.length) return;
+
+  let ticking = false;
+
+  function updateParallax() {
+    const scrollY = window.scrollY;
+    const winH = window.innerHeight;
+
+    imgs.forEach((img) => {
+      const parent = img.closest('.cinematic-break, .results-bg, .process-bg');
+      if (!parent) return;
+
+      const rect = parent.getBoundingClientRect();
+      // Only apply when visible
+      if (rect.bottom < 0 || rect.top > winH) return;
+
+      // Parallax factor: image moves slower than scroll
+      const progress = (rect.top + rect.height / 2) / (winH + rect.height);
+      const offset = (progress - 0.5) * -60; // +-30px shift
+
+      img.style.transform = `translateY(${offset}px) scale(1.08)`;
+    });
+
+    ticking = false;
+  }
+
+  window.addEventListener('scroll', () => {
+    if (!ticking) {
+      requestAnimationFrame(updateParallax);
+      ticking = true;
+    }
+  }, { passive: true });
+
+  // Initial pass
+  updateParallax();
+}
+
+// ============================
+// LAZY VIDEO LOADING
+// ============================
+function initLazyVideos() {
+  const videos = document.querySelectorAll('video[preload="none"]');
+  if (!videos.length) return;
+
+  // Respect reduced motion preference
+  if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+    videos.forEach((v) => v.remove());
+    return;
+  }
+
+  const observer = new IntersectionObserver(
+    (entries) => {
+      entries.forEach((entry) => {
+        if (entry.isIntersecting) {
+          const video = entry.target;
+          video.preload = 'auto';
+          video.load();
+          video.play().catch(() => {});
+          observer.unobserve(video);
+        }
+      });
+    },
+    { rootMargin: '200px 0px' }
+  );
+
+  videos.forEach((v) => observer.observe(v));
 }
 
 // ============================

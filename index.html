@@ -31,7 +31,9 @@
        ================================================ -->
   <section id="hero" class="section section-hero">
     <div class="hero-video-wrap" aria-hidden="true">
-      <img src="assets/wave-bg.jpg" alt="" class="hero-bg-img" />
+      <video class="hero-bg-video" autoplay muted loop playsinline preload="auto" poster="assets/pexels-flickr-156787.jpg">
+        <source src="assets/14690766_3840_2160_30fps.mp4" type="video/mp4">
+      </video>
     </div>
     <canvas id="hero-particles" aria-hidden="true"></canvas>
     <div class="hero-content anim-fade-up">
@@ -62,6 +64,7 @@
     <div class="container">
       <p class="section-eyebrow anim-fade-up">The Problem</p>
       <h2 class="section-headline anim-fade-up" data-delay="100">You're Losing Money Every Day You Don't Fix This</h2>
+
       <div class="problem-grid">
         <div class="problem-card anim-fade-up" data-delay="200">
           <div class="problem-icon">
@@ -104,6 +107,13 @@
       </div>
     </div>
   </section>
+
+  <!-- Cinematic break: Problem → Solution -->
+  <div class="cinematic-break" aria-hidden="true">
+    <img src="assets/pexels-alex-dos-santos-305643819-33077897.jpg" alt="" class="featured-img parallax-img" loading="lazy" />
+    <div class="featured-image-overlay"></div>
+    <p class="featured-caption">Your business shouldn't feel this alone.</p>
+  </div>
 
   <!-- ================================================
        SECTION 3: SOLUTION
@@ -150,11 +160,16 @@
   <!-- ================================================
        SECTION 4: RESULTS / STATS
        ================================================ -->
-  <section id="results" class="section section-results">
-    <div class="container">
+  <section id="results" class="section section-results-cinematic">
+    <div class="results-bg" aria-hidden="true">
+      <img src="assets/pexels-septimiu-lupea-271955805-34525355.jpg" alt="" class="featured-img parallax-img" loading="lazy" />
+      <div class="results-bg-overlay"></div>
+    </div>
+    <div class="results-content container">
       <p class="section-eyebrow anim-fade-up">Results</p>
       <h2 class="section-headline anim-fade-up" data-delay="100">Numbers That Speak for Themselves</h2>
-      <div class="stats-grid">
+
+      <div class="results-stats">
         <div class="stat-card anim-fade-up" data-delay="200">
           <div class="stat-value">
             <span class="stat-number" data-target="50">0</span><span class="stat-suffix">+</span>
@@ -187,10 +202,15 @@
        SECTION 5: PROCESS TIMELINE
        ================================================ -->
   <section id="process" class="section section-process">
+    <div class="process-bg" aria-hidden="true">
+      <img src="assets/pexels-flickr-156787.jpg" alt="" class="featured-img parallax-img" loading="lazy" />
+      <div class="process-bg-overlay"></div>
+    </div>
     <div class="container">
       <p class="section-eyebrow anim-fade-up">The Process</p>
       <h2 class="section-headline anim-fade-up" data-delay="100">The 16-Week Challenge</h2>
       <p class="section-sub anim-fade-up" data-delay="150">We don't just sell you software. We build, deploy, and optimize your AI system — and prove ROI within 16 weeks.</p>
+
       <div class="timeline">
         <div class="timeline-item anim-fade-up" data-delay="200">
           <div class="timeline-marker">1</div>
@@ -228,7 +248,7 @@
        SECTION 6: MANIFESTO
        ================================================ -->
   <section id="manifesto" class="section section-manifesto has-bg-image">
-    <img src="assets/manifesto-bg.jpg" alt="" class="section-bg-img" aria-hidden="true" />
+    <img src="assets/manifesto-bg.jpg" alt="" class="section-bg-img section-bg-img--vivid" aria-hidden="true" />
     <div class="container container-narrow">
       <h2 class="manifesto-headline anim-fade-up">We Don't Do Hype.</h2>
       <p class="manifesto-text anim-fade-up" data-delay="150">
@@ -274,7 +294,12 @@
   <!-- ================================================
        SECTION 8: FINAL CTA
        ================================================ -->
-  <section id="final-cta" class="section section-final">
+  <section id="final-cta" class="section section-final has-bg-video">
+    <div class="section-video-wrap" aria-hidden="true">
+      <video class="section-bg-video" autoplay muted loop playsinline preload="none">
+        <source src="assets/14690772_3840_2160_30fps.mp4" type="video/mp4">
+      </video>
+    </div>
     <div class="container container-narrow">
       <h2 class="final-headline anim-fade-up">Ready to Get 50+ Hours<br>Back Every Month?</h2>
       <p class="final-sub anim-fade-up" data-delay="100">Book your free automation audit, or talk to Alex — our AI consultant — right now. No forms, no pressure.</p>

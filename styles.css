@@ -37,7 +37,7 @@
   --radius-xl: 28px;
 
   --transition: 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-  --font: 'Outfit', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  --font: 'Apple LiSung', 'LiSung Pro', 'Outfit', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
 }
 
 /* ----- Reset / Base ----- */
@@ -197,19 +197,19 @@ body {
   padding-top: 5rem;
 }
 
-/* Hero background image/video layer */
+/* Hero background video layer */
 .hero-video-wrap {
   position: absolute;
   inset: 0;
   z-index: 0;
   overflow: hidden;
 }
-.hero-bg-img {
+.hero-bg-video {
   width: 100%;
   height: 100%;
   object-fit: cover;
-  opacity: 0.25;
-  filter: saturate(0.6) brightness(0.4);
+  opacity: 0.5;
+  filter: saturate(0.8) brightness(0.4);
 }
 
 #hero-particles {
@@ -377,6 +377,101 @@ body {
 }
 
 /* ================================================
+   CINEMATIC FULL-BLEED IMAGES
+   ================================================ */
+.cinematic-break {
+  position: relative;
+  width: 100vw;
+  margin-left: calc(-50vw + 50%);
+  height: 60vh;
+  min-height: 360px;
+  max-height: 600px;
+  overflow: hidden;
+}
+.cinematic-break .featured-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  will-change: transform;
+  transition: none;
+}
+.cinematic-break .featured-image-overlay {
+  position: absolute;
+  inset: 0;
+  background:
+    linear-gradient(to bottom, var(--bg) 0%, transparent 18%),
+    linear-gradient(to top, var(--bg-subtle) 0%, transparent 22%);
+  pointer-events: none;
+}
+.cinematic-break--subtle .featured-image-overlay {
+  background:
+    linear-gradient(to bottom, var(--bg-subtle) 0%, transparent 18%),
+    linear-gradient(to top, var(--bg) 0%, transparent 22%);
+}
+.cinematic-break--to-same .featured-image-overlay {
+  background:
+    linear-gradient(to bottom, var(--bg-subtle) 0%, transparent 18%),
+    linear-gradient(to top, var(--bg-subtle) 0%, transparent 22%);
+}
+.featured-caption {
+  position: absolute;
+  bottom: 15%;
+  left: 50%;
+  transform: translateX(-50%);
+  font-size: 1rem;
+  font-weight: 500;
+  color: rgba(255, 255, 255, 0.6);
+  z-index: 1;
+  letter-spacing: 0.04em;
+  text-align: center;
+  max-width: 600px;
+  text-shadow: 0 2px 12px rgba(0, 0, 0, 0.7);
+}
+
+/* ================================================
+   RESULTS — stats overlaid on cinematic image
+   ================================================ */
+.section-results-cinematic {
+  position: relative;
+  min-height: 80vh;
+  display: flex;
+  align-items: center;
+  overflow: hidden;
+  padding: 0;
+}
+.results-bg {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+}
+.results-bg .featured-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+.results-bg-overlay {
+  position: absolute;
+  inset: 0;
+  background:
+    linear-gradient(135deg, rgba(10, 10, 15, 0.88) 0%, rgba(10, 10, 15, 0.5) 50%, rgba(10, 10, 15, 0.75) 100%);
+  pointer-events: none;
+}
+.results-content {
+  position: relative;
+  z-index: 1;
+  width: 100%;
+  padding: 6rem 2rem;
+}
+.results-stats {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 1.5rem;
+  margin-top: 3rem;
+}
+
+/* ================================================
    SECTION 3: SOLUTION
    ================================================ */
 .solution-grid {
@@ -449,9 +544,7 @@ body {
 /* ================================================
    SECTION 4: STATS
    ================================================ */
-.section-results {
-  background: var(--bg-subtle);
-}
+/* section-results is now cinematic — no bg needed */
 
 .stats-grid {
   display: grid;
@@ -463,14 +556,17 @@ body {
 .stat-card {
   text-align: center;
   padding: 2.5rem 1.5rem;
-  background: var(--bg-card);
-  border: 1px solid var(--glass-border);
+  background: rgba(10, 10, 15, 0.55);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid rgba(255, 255, 255, 0.08);
   border-radius: var(--radius-lg);
   transition: var(--transition);
 }
 .stat-card:hover {
   border-color: var(--accent-border);
   transform: translateY(-4px);
+  background: rgba(10, 10, 15, 0.7);
 }
 
 .stat-value {
@@ -513,6 +609,29 @@ body {
 /* ================================================
    SECTION 5: PROCESS TIMELINE
    ================================================ */
+.section-process {
+  position: relative;
+  overflow: hidden;
+}
+.process-bg {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+}
+.process-bg .featured-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+.process-bg-overlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(180deg, var(--bg) 0%, rgba(10, 10, 15, 0.82) 20%, rgba(10, 10, 15, 0.82) 80%, var(--bg-subtle) 100%);
+}
+.section-process > .container {
+  position: relative;
+  z-index: 1;
+}
 .timeline {
   position: relative;
   max-width: 640px;
@@ -585,8 +704,35 @@ body {
   filter: saturate(0.5) brightness(0.3);
   z-index: 0;
 }
+.section-bg-img--vivid {
+  opacity: 0.35;
+  filter: saturate(0.7) brightness(0.35);
+}
 .has-bg-image > .container,
 .has-bg-image > .container-narrow {
+  position: relative;
+  z-index: 1;
+}
+
+/* Section background video support */
+.has-bg-video {
+  position: relative;
+}
+.section-video-wrap {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  overflow: hidden;
+}
+.section-bg-video {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  opacity: 0.4;
+  filter: saturate(0.7) brightness(0.35);
+}
+.has-bg-video > .container,
+.has-bg-video > .container-narrow {
   position: relative;
   z-index: 1;
 }
@@ -1146,6 +1292,21 @@ body {
 }
 
 /* ================================================
+   PARALLAX IMAGES
+   ================================================ */
+.parallax-img {
+  will-change: transform;
+}
+
+/* Seamless section transitions — no hard edges */
+.section-problem {
+  padding-bottom: 0;
+}
+.section-solution {
+  padding-top: 4rem;
+}
+
+/* ================================================
    SCROLL ANIMATIONS
    ================================================ */
 .anim-fade-up {
@@ -1176,7 +1337,10 @@ body {
 
   .problem-grid { grid-template-columns: 1fr; }
   .solution-grid { grid-template-columns: 1fr; }
-  .stats-grid { grid-template-columns: repeat(2, 1fr); }
+
+  .results-stats { grid-template-columns: 1fr 1fr; }
+
+  .cinematic-break { height: 40vh; min-height: 240px; }
 
   .manifesto-headline { font-size: clamp(2rem, 8vw, 3rem); }
   .pricing-card { padding: 2rem 1.5rem; }
@@ -1186,6 +1350,10 @@ body {
 }
 
 @media (max-width: 640px) {
+  /* Hide heavy videos on mobile to save bandwidth */
+  .hero-bg-video,
+  .section-bg-video { display: none; }
+
   .chat-container,
   .voice-container {
     max-width: 100%;
@@ -1202,8 +1370,9 @@ body {
   .hero-ctas { flex-direction: column; align-items: center; }
   .hero-ctas .btn { width: 100%; max-width: 300px; justify-content: center; }
 
-  .stats-grid { grid-template-columns: 1fr 1fr; gap: 1rem; }
+  .results-stats { grid-template-columns: 1fr 1fr; }
   .stat-number { font-size: 2.5rem; }
+  .cinematic-break { height: 32vh; min-height: 200px; }
 
   .footer-inner { flex-direction: column; gap: 0.5rem; text-align: center; }
 }
@@ -1211,6 +1380,15 @@ body {
 @media (max-width: 360px) {
   .hero-content { padding: 1rem; }
   .nav-actions { gap: 0.4rem; }
+}
+
+/* ================================================
+   REDUCED MOTION
+   ================================================ */
+@media (prefers-reduced-motion: reduce) {
+  .hero-bg-video,
+  .section-bg-video { display: none; }
+  .anim-fade-up { opacity: 1; transform: none; transition: none; }
 }
 
 /* ================================================
