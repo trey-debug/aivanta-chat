@@ -107,6 +107,18 @@ function cacheDom() {
   // Pricing CTA
   dom.pricingCta   = document.getElementById('pricing-cta');
 
+  // Meet Alex buttons
+  dom.alexIntroText  = document.getElementById('alex-intro-text');
+  dom.alexIntroVoice = document.getElementById('alex-intro-voice');
+
+  // Discovery call form
+  dom.discoveryOverlay  = document.getElementById('discovery-form');
+  dom.btnCloseDiscovery = document.getElementById('btn-close-discovery');
+  dom.discoveryForm     = document.getElementById('discovery-call-form');
+  dom.discoverySuccess  = document.getElementById('discovery-success');
+  dom.discCloseSuccess  = document.getElementById('disc-close-success');
+  dom.finalDiscovery    = document.getElementById('final-discovery');
+
   // Close buttons
   dom.btnCloseText  = document.getElementById('btn-close-text');
   dom.btnCloseVoice = document.getElementById('btn-close-voice');
@@ -153,7 +165,20 @@ function init() {
 
   if (dom.finalText)  dom.finalText.addEventListener('click', () => openOverlay('text'));
   if (dom.finalVoice) dom.finalVoice.addEventListener('click', () => openOverlay('voice'));
-  if (dom.pricingCta) dom.pricingCta.addEventListener('click', () => openOverlay('text'));
+
+  // Meet Alex CTA buttons
+  if (dom.alexIntroText)  dom.alexIntroText.addEventListener('click', () => openOverlay('text'));
+  if (dom.alexIntroVoice) dom.alexIntroVoice.addEventListener('click', () => openOverlay('voice'));
+
+  // Discovery call form
+  if (dom.pricingCta) dom.pricingCta.addEventListener('click', () => openDiscoveryForm());
+  if (dom.finalDiscovery) dom.finalDiscovery.addEventListener('click', () => openDiscoveryForm());
+  if (dom.btnCloseDiscovery) dom.btnCloseDiscovery.addEventListener('click', () => closeDiscoveryForm());
+  if (dom.discoveryOverlay) {
+    dom.discoveryOverlay.querySelector('.overlay-backdrop').addEventListener('click', () => closeDiscoveryForm());
+  }
+  if (dom.discCloseSuccess) dom.discCloseSuccess.addEventListener('click', () => closeDiscoveryForm());
+  if (dom.discoveryForm) dom.discoveryForm.addEventListener('submit', handleDiscoverySubmit);
 
   // Close overlays
   dom.btnCloseText.addEventListener('click', () => closeOverlay());
@@ -174,10 +199,12 @@ function init() {
 
   // Close overlays on Escape
   document.addEventListener('keydown', (e) => {
-    if (e.key === 'Escape' && state.overlayOpen) {
-      if (state.overlayOpen === 'voice') {
+    if (e.key === 'Escape') {
+      if (dom.discoveryOverlay && dom.discoveryOverlay.classList.contains('active')) {
+        closeDiscoveryForm();
+      } else if (state.overlayOpen === 'voice') {
         closeVoice();
-      } else {
+      } else if (state.overlayOpen) {
         closeOverlay();
       }
     }
@@ -190,6 +217,62 @@ function init() {
   initLazyVideos();
   initParallax();
   drawIdleCanvas();
+}
+
+// ============================
+// DISCOVERY CALL FORM
+// ============================
+function openDiscoveryForm() {
+  dom.discoveryOverlay.classList.add('active');
+  document.body.style.overflow = 'hidden';
+  dom.discoveryForm.classList.remove('hidden');
+  dom.discoverySuccess.classList.add('hidden');
+}
+
+function closeDiscoveryForm() {
+  dom.discoveryOverlay.classList.remove('active');
+  document.body.style.overflow = '';
+}
+
+async function handleDiscoverySubmit(e) {
+  e.preventDefault();
+  const form = e.target;
+  const submitBtn = form.querySelector('#disc-submit');
+  submitBtn.disabled = true;
+  submitBtn.textContent = 'Sending...';
+
+  try {
+    const formData = {
+      name: form.querySelector('#disc-name').value,
+      email: form.querySelector('#disc-email').value,
+      phone: form.querySelector('#disc-phone').value,
+      business: form.querySelector('#disc-business').value,
+      industry: form.querySelector('#disc-industry').value,
+      revenue: form.querySelector('#disc-revenue').value,
+      message: form.querySelector('#disc-message').value,
+    };
+
+    const res = await fetch('https://treymccormick.app.n8n.cloud/webhook/aivanta-discovery', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(formData),
+    });
+
+    if (res.ok) {
+      dom.discoveryForm.classList.add('hidden');
+      dom.discoverySuccess.classList.remove('hidden');
+      form.reset();
+      showToast('Discovery call request sent!', 'success');
+    } else {
+      throw new Error('Form submission failed');
+    }
+  } catch (err) {
+    debug('Discovery form error:', err);
+    showToast('Something went wrong. Please try again.', 'error');
+  } finally {
+    submitBtn.disabled = false;
+    submitBtn.textContent = 'Book Your Discovery Call';
+  }
 }
 
 // ============================
@@ -265,41 +348,6 @@ function initScrollAnimations() {
 
   elements.forEach((el) => observer.observe(el));
 
-  // Stat counter animation
-  const statNumbers = document.querySelectorAll('.stat-number[data-target]');
-  if (statNumbers.length) {
-    const statObserver = new IntersectionObserver(
-      (entries) => {
-        entries.forEach((entry) => {
-          if (entry.isIntersecting) {
-            animateCounter(entry.target);
-            statObserver.unobserve(entry.target);
-          }
-        });
-      },
-      { threshold: 0.5 }
-    );
-    statNumbers.forEach((el) => statObserver.observe(el));
-  }
-}
-
-function animateCounter(el) {
-  const target = parseInt(el.dataset.target, 10);
-  const duration = 1800;
-  const startTime = performance.now();
-
-  function update(now) {
-    const elapsed = now - startTime;
-    const progress = Math.min(elapsed / duration, 1);
-    // Ease out cubic
-    const eased = 1 - Math.pow(1 - progress, 3);
-    const current = Math.round(eased * target);
-    el.textContent = current.toLocaleString();
-    if (progress < 1) {
-      requestAnimationFrame(update);
-    }
-  }
-  requestAnimationFrame(update);
 }
 
 // ============================
@@ -414,7 +462,7 @@ function initParallax() {
     const winH = window.innerHeight;
 
     imgs.forEach((img) => {
-      const parent = img.closest('.cinematic-break, .results-bg, .process-bg');
+      const parent = img.closest('.cinematic-break, .comparison-bg, .process-bg');
       if (!parent) return;
 
       const rect = parent.getBoundingClientRect();
