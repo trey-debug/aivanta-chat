@@ -3,77 +3,301 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="description" content="AIVANTA - AI Automation That Actually Works. Talk to Alex, our AI automation specialist.">
-  <meta name="theme-color" content="#0f172a">
+  <meta name="description" content="AIVANTA — AI Automation for Service Businesses. Stop losing revenue to missed calls and manual follow-ups.">
+  <meta name="theme-color" content="#0A0A0F">
   <title>AIVANTA | AI Automation That Actually Works</title>
 
-  <!-- Fonts -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
 
   <link rel="stylesheet" href="styles.css">
 </head>
 <body>
 
   <!-- ================================================
-       HERO / LANDING SCREEN
+       FIXED NAVIGATION
        ================================================ -->
-  <section id="hero" class="screen active" aria-label="Welcome to AIVANTA">
-    <!-- Animated background gradient orbs -->
-    <div class="bg-orbs" aria-hidden="true">
-      <div class="orb orb-1"></div>
-      <div class="orb orb-2"></div>
-      <div class="orb orb-3"></div>
+  <nav id="main-nav" class="nav">
+    <a href="#hero" class="nav-logo">AIVANTA</a>
+    <div class="nav-actions">
+      <button id="nav-talk" class="nav-btn nav-btn-ghost">Talk to Alex</button>
+      <a href="#pricing" class="nav-btn nav-btn-primary">Book Free Audit</a>
     </div>
+  </nav>
 
-    <div class="hero-content">
-      <h1 class="logo" aria-label="AIVANTA">AIVANTA</h1>
-      <p class="tagline">AI Automation That Actually Works</p>
-      <p class="subtitle">
-        Talk to <strong>Alex</strong>, our AI automation specialist. Get instant
-        answers about how automation can save your business 50+ hours per week.
+  <!-- ================================================
+       SECTION 1: HERO
+       ================================================ -->
+  <section id="hero" class="section section-hero">
+    <canvas id="hero-particles" aria-hidden="true"></canvas>
+    <div class="hero-content anim-fade-up">
+      <p class="hero-eyebrow">AI Automation for Service Businesses</p>
+      <h1 class="hero-headline">
+        Your Shop Runs on<br>Grease and Grit.<br>
+        <span class="text-accent">Let AI Handle the Rest.</span>
+      </h1>
+      <p class="hero-sub">
+        Stop losing revenue to missed calls, forgotten follow-ups, and manual busywork.
+        AIVANTA deploys AI agents that work 24/7 — so you don't have to.
       </p>
-
-      <div class="cta-buttons" role="group" aria-label="Choose how to chat">
-        <button id="btn-text-chat" class="cta cta-text" aria-label="Start text chat with Alex">
-          <span class="cta-icon" aria-hidden="true">
-            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-              <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/>
-            </svg>
-          </span>
-          <span class="cta-label">
-            <span class="cta-title">Text Chat</span>
-            <span class="cta-desc">Type your questions</span>
-          </span>
-        </button>
-
-        <button id="btn-voice-chat" class="cta cta-voice" aria-label="Start voice chat with Alex">
-          <span class="cta-icon" aria-hidden="true">
-            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-              <path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"/>
-              <path d="M19 10v2a7 7 0 0 1-14 0v-2"/>
-              <line x1="12" y1="19" x2="12" y2="23"/>
-              <line x1="8" y1="23" x2="16" y2="23"/>
-            </svg>
-          </span>
-          <span class="cta-label">
-            <span class="cta-title">Voice Chat</span>
-            <span class="cta-desc">Talk to Alex live</span>
-          </span>
-        </button>
+      <div class="hero-ctas">
+        <button id="hero-voice" class="btn btn-primary btn-lg">Talk to Alex Live</button>
+        <a href="#solution" class="btn btn-ghost btn-lg">See How It Works</a>
       </div>
-
-      <p class="trust-line">No signup required &middot; Free consultation &middot; Real answers in seconds</p>
+      <p class="hero-trust">No signup required &middot; Free audit &middot; Results in 16 weeks</p>
     </div>
   </section>
 
   <!-- ================================================
-       TEXT CHAT SCREEN
+       SECTION 2: PROBLEM
        ================================================ -->
-  <section id="text-chat" class="screen" aria-label="Text chat with Alex">
+  <section id="problem" class="section section-problem">
+    <div class="container">
+      <p class="section-eyebrow anim-fade-up">The Problem</p>
+      <h2 class="section-headline anim-fade-up" data-delay="100">You're Losing Money Every Day You Don't Fix This</h2>
+      <div class="problem-grid">
+        <div class="problem-card anim-fade-up" data-delay="200">
+          <div class="problem-icon">
+            <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+              <path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07 19.5 19.5 0 01-6-6 19.79 19.79 0 01-3.07-8.67A2 2 0 014.11 2h3a2 2 0 012 1.72c.127.96.361 1.903.7 2.81a2 2 0 01-.45 2.11L8.09 9.91a16 16 0 006 6l1.27-1.27a2 2 0 012.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0122 16.92z"/>
+              <line x1="23" y1="1" x2="17" y2="7"/><line x1="17" y1="1" x2="23" y2="7"/>
+            </svg>
+          </div>
+          <h3>Missed Calls = Missed Revenue</h3>
+          <p>Every unanswered call is a customer choosing your competitor. After hours, weekends, lunch breaks — money walks out the door.</p>
+        </div>
+        <div class="problem-card anim-fade-up" data-delay="300">
+          <div class="problem-icon">
+            <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+              <circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/>
+            </svg>
+          </div>
+          <h3>Manual Follow-Ups Kill Growth</h3>
+          <p>Your team spends hours chasing leads that go cold. By the time you call back, they've already booked with someone else.</p>
+        </div>
+        <div class="problem-card anim-fade-up" data-delay="400">
+          <div class="problem-icon">
+            <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+              <path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4-4v2"/><circle cx="9" cy="7" r="4"/>
+              <path d="M23 21v-2a4 4 0 00-3-3.87"/><path d="M16 3.13a4 4 0 010 7.75"/>
+            </svg>
+          </div>
+          <h3>Staff Stretched Too Thin</h3>
+          <p>Your best people waste time on scheduling, data entry, and repetitive questions instead of high-value work.</p>
+        </div>
+        <div class="problem-card anim-fade-up" data-delay="500">
+          <div class="problem-icon">
+            <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+              <line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 000 7h5a3.5 3.5 0 010 7H6"/>
+            </svg>
+          </div>
+          <h3>Revenue Left on the Table</h3>
+          <p>No systematic way to qualify, nurture, and convert leads. Opportunities slip through the cracks every single day.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ================================================
+       SECTION 3: SOLUTION
+       ================================================ -->
+  <section id="solution" class="section section-solution">
+    <div class="container">
+      <p class="section-eyebrow anim-fade-up">The Solution</p>
+      <h2 class="section-headline anim-fade-up" data-delay="100">Three AI Agents. One Unstoppable System.</h2>
+      <div class="solution-grid">
+        <div class="solution-card anim-fade-up" data-delay="200">
+          <div class="solution-number">01</div>
+          <h3>AI Receptionist</h3>
+          <p>Answers every call, 24/7. Qualifies leads, books appointments, and routes urgent requests — all in a natural human voice.</p>
+          <ul class="solution-features">
+            <li>Never misses a call</li>
+            <li>Speaks naturally, not robotic</li>
+            <li>Books directly to your calendar</li>
+          </ul>
+        </div>
+        <div class="solution-card anim-fade-up" data-delay="350">
+          <div class="solution-number">02</div>
+          <h3>AI Follow-Up Agent</h3>
+          <p>Automatically follows up with every lead via text, email, and voice. Persistent, polite, and always on time.</p>
+          <ul class="solution-features">
+            <li>Follows up within minutes</li>
+            <li>Multi-channel outreach</li>
+            <li>Learns what converts</li>
+          </ul>
+        </div>
+        <div class="solution-card anim-fade-up" data-delay="500">
+          <div class="solution-number">03</div>
+          <h3>AI Operations Manager</h3>
+          <p>Automates scheduling, dispatching, invoicing, and reporting. Your back office runs itself.</p>
+          <ul class="solution-features">
+            <li>Automates admin tasks</li>
+            <li>Real-time dashboards</li>
+            <li>Integrates with your tools</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ================================================
+       SECTION 4: RESULTS / STATS
+       ================================================ -->
+  <section id="results" class="section section-results">
+    <div class="container">
+      <p class="section-eyebrow anim-fade-up">Results</p>
+      <h2 class="section-headline anim-fade-up" data-delay="100">Numbers That Speak for Themselves</h2>
+      <div class="stats-grid">
+        <div class="stat-card anim-fade-up" data-delay="200">
+          <div class="stat-value">
+            <span class="stat-number" data-target="50">0</span><span class="stat-suffix">+</span>
+          </div>
+          <span class="stat-label">Hours Saved Per Month</span>
+        </div>
+        <div class="stat-card anim-fade-up" data-delay="300">
+          <div class="stat-value">
+            <span class="stat-number" data-target="3">0</span><span class="stat-suffix">x</span>
+          </div>
+          <span class="stat-label">More Calls Answered</span>
+        </div>
+        <div class="stat-card anim-fade-up" data-delay="400">
+          <div class="stat-value">
+            <span class="stat-number" data-target="98">0</span><span class="stat-suffix">%</span>
+          </div>
+          <span class="stat-label">Customer Satisfaction</span>
+        </div>
+        <div class="stat-card anim-fade-up" data-delay="500">
+          <div class="stat-value">
+            <span class="stat-prefix">$</span><span class="stat-number" data-target="15000">0</span><span class="stat-suffix">+</span>
+          </div>
+          <span class="stat-label">Revenue Recovered</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ================================================
+       SECTION 5: PROCESS TIMELINE
+       ================================================ -->
+  <section id="process" class="section section-process">
+    <div class="container">
+      <p class="section-eyebrow anim-fade-up">The Process</p>
+      <h2 class="section-headline anim-fade-up" data-delay="100">The 16-Week Challenge</h2>
+      <p class="section-sub anim-fade-up" data-delay="150">We don't just sell you software. We build, deploy, and optimize your AI system — and prove ROI within 16 weeks.</p>
+      <div class="timeline">
+        <div class="timeline-item anim-fade-up" data-delay="200">
+          <div class="timeline-marker">1</div>
+          <div class="timeline-content">
+            <h3>Week 1–2: Discovery &amp; Audit</h3>
+            <p>We map your operations, identify bottlenecks, and design your custom AI stack. Zero guesswork.</p>
+          </div>
+        </div>
+        <div class="timeline-item anim-fade-up" data-delay="300">
+          <div class="timeline-marker">2</div>
+          <div class="timeline-content">
+            <h3>Week 3–6: Build &amp; Deploy</h3>
+            <p>We build and deploy your AI agents. Your team trains alongside — no disruption, no downtime.</p>
+          </div>
+        </div>
+        <div class="timeline-item anim-fade-up" data-delay="400">
+          <div class="timeline-marker">3</div>
+          <div class="timeline-content">
+            <h3>Week 7–12: Optimize &amp; Scale</h3>
+            <p>We monitor performance, tune accuracy, and expand automation coverage. You see results compounding.</p>
+          </div>
+        </div>
+        <div class="timeline-item anim-fade-up" data-delay="500">
+          <div class="timeline-marker">4</div>
+          <div class="timeline-content">
+            <h3>Week 13–16: Prove ROI</h3>
+            <p>Final metrics review. You see exactly how many hours saved, leads captured, and revenue recovered.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ================================================
+       SECTION 6: MANIFESTO
+       ================================================ -->
+  <section id="manifesto" class="section section-manifesto">
+    <div class="container container-narrow">
+      <h2 class="manifesto-headline anim-fade-up">We Don't Do Hype.</h2>
+      <p class="manifesto-text anim-fade-up" data-delay="150">
+        We don't promise "10x" overnight. We don't throw buzzwords at you. We build AI systems
+        that actually work — for real businesses, with real constraints, solving real problems.
+        If we can't prove ROI in 16 weeks, you shouldn't pay us.
+      </p>
+      <p class="manifesto-sig anim-fade-up" data-delay="300">— The AIVANTA Team</p>
+    </div>
+  </section>
+
+  <!-- ================================================
+       SECTION 7: PRICING
+       ================================================ -->
+  <section id="pricing" class="section section-pricing">
+    <div class="container">
+      <p class="section-eyebrow anim-fade-up">Pricing</p>
+      <h2 class="section-headline anim-fade-up" data-delay="100">One Plan. Everything Included.</h2>
+      <div class="pricing-card anim-fade-up" data-delay="200">
+        <div class="pricing-header">
+          <span class="pricing-label">The 16-Week Challenge</span>
+          <div class="pricing-amount">
+            <span class="pricing-dollar">$</span>
+            <span class="pricing-number">1,000</span>
+            <span class="pricing-period">/month</span>
+          </div>
+        </div>
+        <ul class="pricing-features">
+          <li>Full AI automation audit</li>
+          <li>Custom AI agent deployment</li>
+          <li>24/7 AI receptionist</li>
+          <li>Automated follow-up sequences</li>
+          <li>Real-time analytics dashboard</li>
+          <li>Dedicated success manager</li>
+          <li>ROI guarantee — or you walk</li>
+        </ul>
+        <button id="pricing-cta" class="btn btn-primary btn-lg btn-full">Book Your Free Audit</button>
+        <p class="pricing-note">No contracts. Cancel anytime. ROI guaranteed.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ================================================
+       SECTION 8: FINAL CTA
+       ================================================ -->
+  <section id="final-cta" class="section section-final">
+    <div class="container container-narrow">
+      <h2 class="final-headline anim-fade-up">Ready to Stop Losing Money<br>to Missed Calls?</h2>
+      <p class="final-sub anim-fade-up" data-delay="100">Talk to Alex — our AI — right now. Ask anything. No forms, no sales pressure, no BS.</p>
+      <div class="final-ctas anim-fade-up" data-delay="200">
+        <button id="final-text" class="btn btn-primary btn-lg">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z"/></svg>
+          Chat with Alex
+        </button>
+        <button id="final-voice" class="btn btn-accent btn-lg">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 1a3 3 0 00-3 3v8a3 3 0 006 0V4a3 3 0 00-3-3z"/><path d="M19 10v2a7 7 0 01-14 0v-2"/><line x1="12" y1="19" x2="12" y2="23"/><line x1="8" y1="23" x2="16" y2="23"/></svg>
+          Talk to Alex Live
+        </button>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <div class="container footer-inner">
+      <span class="footer-logo">AIVANTA</span>
+      <span class="footer-copy">&copy; 2026 AIVANTA. All rights reserved.</span>
+    </div>
+  </footer>
+
+  <!-- ================================================
+       TEXT CHAT OVERLAY (modal over landing page)
+       ================================================ -->
+  <section id="text-chat" class="screen-overlay" aria-label="Text chat with Alex">
+    <div class="overlay-backdrop"></div>
     <div class="chat-container glass-card">
-      <!-- Header -->
       <header class="chat-header">
         <div class="chat-header-left">
           <div class="avatar" aria-hidden="true">A</div>
@@ -86,15 +310,15 @@
         <div class="chat-header-actions">
           <button id="btn-clear-chat" class="icon-btn" aria-label="Clear conversation" title="Clear conversation">
             <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-              <polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/>
+              <polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 01-2 2H7a2 2 0 01-2-2V6m3 0V4a2 2 0 012-2h4a2 2 0 012 2v2"/>
             </svg>
           </button>
           <button id="btn-copy-chat" class="icon-btn" aria-label="Copy conversation" title="Copy conversation">
             <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-              <rect x="9" y="9" width="13" height="13" rx="2" ry="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/>
+              <rect x="9" y="9" width="13" height="13" rx="2" ry="2"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/>
             </svg>
           </button>
-          <button id="btn-close-text" class="icon-btn" aria-label="Close chat" title="Back to home">
+          <button id="btn-close-text" class="icon-btn" aria-label="Close chat" title="Close chat">
             <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
               <line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/>
             </svg>
@@ -102,29 +326,16 @@
         </div>
       </header>
 
-      <!-- Messages area -->
-      <div id="chat-messages" class="chat-messages" role="log" aria-live="polite" aria-label="Chat messages">
-        <!-- Messages injected by JS -->
-      </div>
+      <div id="chat-messages" class="chat-messages" role="log" aria-live="polite" aria-label="Chat messages"></div>
 
-      <!-- Typing indicator -->
       <div id="typing-indicator" class="typing-indicator hidden" aria-label="Alex is typing">
         <div class="avatar avatar-sm" aria-hidden="true">A</div>
-        <div class="typing-dots">
-          <span></span><span></span><span></span>
-        </div>
+        <div class="typing-dots"><span></span><span></span><span></span></div>
       </div>
 
-      <!-- Input area -->
       <form id="chat-form" class="chat-input-area" autocomplete="off">
         <label for="chat-input" class="sr-only">Type your message</label>
-        <input
-          id="chat-input"
-          type="text"
-          placeholder="Type your message..."
-          aria-label="Type your message"
-          maxlength="2000"
-        />
+        <input id="chat-input" type="text" placeholder="Type your message..." aria-label="Type your message" maxlength="2000" />
         <button type="submit" id="btn-send" class="send-btn" aria-label="Send message" disabled>
           <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
             <line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/>
@@ -135,11 +346,11 @@
   </section>
 
   <!-- ================================================
-       VOICE CHAT SCREEN
+       VOICE CHAT OVERLAY (modal over landing page)
        ================================================ -->
-  <section id="voice-chat" class="screen" aria-label="Voice chat with Alex">
+  <section id="voice-chat" class="screen-overlay" aria-label="Voice chat with Alex">
+    <div class="overlay-backdrop"></div>
     <div class="voice-container glass-card">
-      <!-- Header -->
       <header class="chat-header">
         <div class="chat-header-left">
           <div class="avatar" aria-hidden="true">A</div>
@@ -149,25 +360,23 @@
             <span class="status-text">Voice Assistant</span>
           </div>
         </div>
-        <button id="btn-close-voice" class="icon-btn" aria-label="Close voice chat" title="Back to home">
+        <button id="btn-close-voice" class="icon-btn" aria-label="Close voice chat" title="Close">
           <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
             <line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/>
           </svg>
         </button>
       </header>
 
-      <!-- Visualizer -->
       <div class="voice-visualizer-wrap">
         <canvas id="voice-canvas" width="300" height="300" aria-hidden="true"></canvas>
         <p id="voice-status" class="voice-status">Tap the mic to speak</p>
       </div>
 
-      <!-- Mic button -->
       <div class="voice-controls">
-        <button id="btn-mic" class="mic-btn" aria-label="Hold to record, release to send">
+        <button id="btn-mic" class="mic-btn" aria-label="Tap to record">
           <svg id="mic-icon" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-            <path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"/>
-            <path d="M19 10v2a7 7 0 0 1-14 0v-2"/>
+            <path d="M12 1a3 3 0 00-3 3v8a3 3 0 006 0V4a3 3 0 00-3-3z"/>
+            <path d="M19 10v2a7 7 0 01-14 0v-2"/>
             <line x1="12" y1="19" x2="12" y2="23"/>
             <line x1="8" y1="23" x2="16" y2="23"/>
           </svg>
@@ -175,7 +384,6 @@
         <p class="mic-hint" id="mic-hint">Tap to start recording</p>
       </div>
 
-      <!-- Transcript -->
       <div class="voice-transcript" aria-label="Conversation transcript">
         <h3>Transcript</h3>
         <div id="voice-transcript-messages">

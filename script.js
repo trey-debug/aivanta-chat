@@ -1,46 +1,77 @@
 /* ============================================
    AIVANTA Frontend — script.js
    Text chat + Voice chat with n8n webhook integration
+   Scroll-driven landing page with overlay modals
    ============================================ */
 
 // ========================================
-// CONFIGURATION — Update these values
+// CONFIGURATION
 // ========================================
 const CONFIG = {
-  // Text chat webhook (POST JSON, returns JSON)
   TEXT_WEBHOOK_URL: 'https://treymccormick.app.n8n.cloud/webhook/aivanta-chat',
-
-  // Voice chat webhook (POST audio blob, returns audio/mpeg)
   VOICE_WEBHOOK_URL: 'https://treymccormick.app.n8n.cloud/webhook/aivanta-voice',
-
-  // Enable console logging for development
   ENABLE_DEBUG: true,
-
-  // Session timeout in ms (30 minutes)
   SESSION_TIMEOUT: 30 * 60 * 1000,
-
-  // Welcome message from Alex (text chat)
   WELCOME_MESSAGE:
     "Hi! I'm Alex, your AI automation assistant from AIVANTA. I help businesses save time and increase revenue through intelligent automation. What brings you here today?",
 };
-// ========================================
+
+// ----- Quick Acknowledgment Phrases -----
+const ACKNOWLEDGMENTS = [
+  "Let me think about that...",
+  "Good question, give me a moment...",
+  "Hmm, let me look into that...",
+  "Great question, working on it...",
+  "Got it, one sec...",
+  "Interesting, let me dig into that...",
+  "Sure thing, let me work on that...",
+];
+let lastAckIndex = -1;
+
+function getRandomAcknowledgment() {
+  let idx;
+  do {
+    idx = Math.floor(Math.random() * ACKNOWLEDGMENTS.length);
+  } while (idx === lastAckIndex && ACKNOWLEDGMENTS.length > 1);
+  lastAckIndex = idx;
+  return ACKNOWLEDGMENTS[idx];
+}
+
+function playProcessingChime() {
+  try {
+    const ctx = ensureAudioContext();
+    const osc = ctx.createOscillator();
+    const gain = ctx.createGain();
+    osc.connect(gain);
+    gain.connect(ctx.destination);
+    osc.type = 'sine';
+    osc.frequency.setValueAtTime(523, ctx.currentTime);
+    osc.frequency.setValueAtTime(659, ctx.currentTime + 0.1);
+    gain.gain.setValueAtTime(0.08, ctx.currentTime);
+    gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.4);
+    osc.start(ctx.currentTime);
+    osc.stop(ctx.currentTime + 0.4);
+  } catch (e) {
+    debug('Chime error (non-critical):', e);
+  }
+}
 
 // ----- Application State -----
 const state = {
   sessionId: generateSessionId(),
-  messages: [],       // text chat: { role, content, timestamp }
+  messages: [],
   isTyping: false,
-  currentScreen: 'hero',
+  overlayOpen: null, // 'text' | 'voice' | null
   voice: {
-    status: 'idle',   // idle | recording | processing | speaking
+    status: 'idle',
     mediaRecorder: null,
     audioChunks: [],
     stream: null,
-    transcript: [],    // { role: 'you'|'alex', text: string }
+    transcript: [],
   },
 };
 
-// ----- Audio Context (must be created during user gesture to bypass autoplay policy) -----
+// ----- Audio Context -----
 let audioCtx = null;
 
 function ensureAudioContext() {
@@ -59,15 +90,28 @@ function ensureAudioContext() {
 const dom = {};
 
 function cacheDom() {
-  dom.screens = {
-    hero:  document.getElementById('hero'),
-    text:  document.getElementById('text-chat'),
-    voice: document.getElementById('voice-chat'),
-  };
-  dom.btnTextChat   = document.getElementById('btn-text-chat');
-  dom.btnVoiceChat  = document.getElementById('btn-voice-chat');
+  // Overlays
+  dom.textOverlay  = document.getElementById('text-chat');
+  dom.voiceOverlay = document.getElementById('voice-chat');
+
+  // Nav buttons
+  dom.navTalk      = document.getElementById('nav-talk');
+
+  // Hero buttons
+  dom.heroVoice    = document.getElementById('hero-voice');
+
+  // Final CTA buttons
+  dom.finalText    = document.getElementById('final-text');
+  dom.finalVoice   = document.getElementById('final-voice');
+
+  // Pricing CTA
+  dom.pricingCta   = document.getElementById('pricing-cta');
+
+  // Close buttons
   dom.btnCloseText  = document.getElementById('btn-close-text');
   dom.btnCloseVoice = document.getElementById('btn-close-voice');
+
+  // Chat
   dom.btnClearChat  = document.getElementById('btn-clear-chat');
   dom.btnCopyChat   = document.getElementById('btn-copy-chat');
   dom.chatForm      = document.getElementById('chat-form');
@@ -75,13 +119,23 @@ function cacheDom() {
   dom.chatMessages  = document.getElementById('chat-messages');
   dom.typingIndicator = document.getElementById('typing-indicator');
   dom.sendBtn       = document.getElementById('btn-send');
+
+  // Voice
   dom.btnMic        = document.getElementById('btn-mic');
   dom.micHint       = document.getElementById('mic-hint');
   dom.voiceCanvas   = document.getElementById('voice-canvas');
   dom.voiceStatus   = document.getElementById('voice-status');
   dom.voiceTranscript = document.getElementById('voice-transcript-messages');
   dom.voicePlaceholder = document.getElementById('voice-placeholder');
+
+  // Toast
   dom.toastContainer = document.getElementById('toast-container');
+
+  // Nav
+  dom.nav = document.getElementById('main-nav');
+
+  // Hero particles
+  dom.heroParticles = document.getElementById('hero-particles');
 }
 
 // ============================
@@ -93,11 +147,21 @@ function init() {
 
   restoreSession();
 
-  // Navigation
-  dom.btnTextChat.addEventListener('click', () => openScreen('text'));
-  dom.btnVoiceChat.addEventListener('click', () => openScreen('voice'));
-  dom.btnCloseText.addEventListener('click', () => openScreen('hero'));
+  // Navigation — open overlays
+  dom.navTalk.addEventListener('click', () => openOverlay('text'));
+  dom.heroVoice.addEventListener('click', () => openOverlay('voice'));
+
+  if (dom.finalText)  dom.finalText.addEventListener('click', () => openOverlay('text'));
+  if (dom.finalVoice) dom.finalVoice.addEventListener('click', () => openOverlay('voice'));
+  if (dom.pricingCta) dom.pricingCta.addEventListener('click', () => openOverlay('text'));
+
+  // Close overlays
+  dom.btnCloseText.addEventListener('click', () => closeOverlay());
   dom.btnCloseVoice.addEventListener('click', closeVoice);
+
+  // Click backdrop to close
+  dom.textOverlay.querySelector('.overlay-backdrop').addEventListener('click', () => closeOverlay());
+  dom.voiceOverlay.querySelector('.overlay-backdrop').addEventListener('click', closeVoice);
 
   // Text chat
   dom.btnClearChat.addEventListener('click', clearChat);
@@ -105,61 +169,231 @@ function init() {
   dom.chatForm.addEventListener('submit', handleSend);
   dom.chatInput.addEventListener('input', handleInputChange);
 
-  // Voice chat — tap to start/stop recording
+  // Voice chat
   dom.btnMic.addEventListener('click', handleMicClick);
 
-  // Start idle canvas animation
+  // Close overlays on Escape
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape' && state.overlayOpen) {
+      if (state.overlayOpen === 'voice') {
+        closeVoice();
+      } else {
+        closeOverlay();
+      }
+    }
+  });
+
+  // Scroll animations
+  initScrollAnimations();
+  initNavScroll();
+  initHeroParticles();
   drawIdleCanvas();
 }
 
 // ============================
-// SCREEN NAVIGATION
+// OVERLAY NAVIGATION (replaces screen navigation)
 // ============================
-function openScreen(name) {
-  Object.values(dom.screens).forEach((s) => s.classList.remove('active'));
+function openOverlay(type) {
+  if (type === 'text') {
+    dom.textOverlay.classList.add('active');
+    state.overlayOpen = 'text';
+    document.body.style.overflow = 'hidden';
 
-  const target = dom.screens[name];
-  if (target) {
-    target.classList.add('active');
-    state.currentScreen = name;
-  }
-
-  if (name === 'text' && state.messages.length === 0) {
-    addMessage('assistant', CONFIG.WELCOME_MESSAGE);
-  }
-
-  if (name === 'text') {
+    if (state.messages.length === 0) {
+      addMessage('assistant', CONFIG.WELCOME_MESSAGE);
+    }
+    if (state.messages.length > 0 && dom.chatMessages.children.length === 0) {
+      renderAllMessages();
+    }
     setTimeout(() => dom.chatInput.focus(), 350);
   }
 
-  // Unlock AudioContext on user gesture (must happen during click, before async work)
-  if (name === 'voice') {
+  if (type === 'voice') {
+    dom.voiceOverlay.classList.add('active');
+    state.overlayOpen = 'voice';
+    document.body.style.overflow = 'hidden';
     ensureAudioContext();
-  }
 
-  // Voice greeting: when opening voice chat for the first time, AI initiates
-  if (name === 'voice' && state.voice.transcript.length === 0) {
-    fetchVoiceGreeting();
-  }
-
-  // Render restored messages when opening text chat
-  if (name === 'text' && state.messages.length > 0 && dom.chatMessages.children.length === 0) {
-    renderAllMessages();
+    if (state.voice.transcript.length === 0) {
+      fetchVoiceGreeting();
+    }
   }
 }
 
+function closeOverlay() {
+  dom.textOverlay.classList.remove('active');
+  dom.voiceOverlay.classList.remove('active');
+  state.overlayOpen = null;
+  document.body.style.overflow = '';
+}
+
 function closeVoice() {
-  // Stop any recording in progress
   if (state.voice.status === 'recording' && state.voice.mediaRecorder) {
     state.voice.mediaRecorder.stop();
   }
-  // Release mic stream
   if (state.voice.stream) {
     state.voice.stream.getTracks().forEach((t) => t.stop());
     state.voice.stream = null;
   }
   setVoiceStatus('idle');
-  openScreen('hero');
+  closeOverlay();
+}
+
+// ============================
+// SCROLL ANIMATIONS (IntersectionObserver)
+// ============================
+function initScrollAnimations() {
+  const elements = document.querySelectorAll('.anim-fade-up');
+  if (!elements.length) return;
+
+  const observer = new IntersectionObserver(
+    (entries) => {
+      entries.forEach((entry) => {
+        if (entry.isIntersecting) {
+          const delay = parseInt(entry.target.dataset.delay || '0', 10);
+          setTimeout(() => {
+            entry.target.classList.add('visible');
+          }, delay);
+          observer.unobserve(entry.target);
+        }
+      });
+    },
+    { threshold: 0.15, rootMargin: '0px 0px -40px 0px' }
+  );
+
+  elements.forEach((el) => observer.observe(el));
+
+  // Stat counter animation
+  const statNumbers = document.querySelectorAll('.stat-number[data-target]');
+  if (statNumbers.length) {
+    const statObserver = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            animateCounter(entry.target);
+            statObserver.unobserve(entry.target);
+          }
+        });
+      },
+      { threshold: 0.5 }
+    );
+    statNumbers.forEach((el) => statObserver.observe(el));
+  }
+}
+
+function animateCounter(el) {
+  const target = parseInt(el.dataset.target, 10);
+  const duration = 1800;
+  const startTime = performance.now();
+
+  function update(now) {
+    const elapsed = now - startTime;
+    const progress = Math.min(elapsed / duration, 1);
+    // Ease out cubic
+    const eased = 1 - Math.pow(1 - progress, 3);
+    const current = Math.round(eased * target);
+    el.textContent = current.toLocaleString();
+    if (progress < 1) {
+      requestAnimationFrame(update);
+    }
+  }
+  requestAnimationFrame(update);
+}
+
+// ============================
+// NAV SCROLL EFFECT
+// ============================
+function initNavScroll() {
+  let ticking = false;
+  window.addEventListener('scroll', () => {
+    if (!ticking) {
+      requestAnimationFrame(() => {
+        dom.nav.classList.toggle('scrolled', window.scrollY > 60);
+        ticking = false;
+      });
+      ticking = true;
+    }
+  });
+}
+
+// ============================
+// HERO PARTICLES (Canvas)
+// ============================
+function initHeroParticles() {
+  const canvas = dom.heroParticles;
+  if (!canvas) return;
+
+  const ctx = canvas.getContext('2d');
+  let particles = [];
+  let w, h;
+  let animId;
+
+  function resize() {
+    w = canvas.width = canvas.offsetWidth;
+    h = canvas.height = canvas.offsetHeight;
+  }
+
+  function createParticles() {
+    particles = [];
+    const count = Math.min(Math.floor((w * h) / 12000), 80);
+    for (let i = 0; i < count; i++) {
+      particles.push({
+        x: Math.random() * w,
+        y: Math.random() * h,
+        vx: (Math.random() - 0.5) * 0.3,
+        vy: (Math.random() - 0.5) * 0.3,
+        r: Math.random() * 1.5 + 0.5,
+        a: Math.random() * 0.3 + 0.1,
+      });
+    }
+  }
+
+  function draw() {
+    ctx.clearRect(0, 0, w, h);
+
+    // Draw particles
+    for (const p of particles) {
+      p.x += p.vx;
+      p.y += p.vy;
+      if (p.x < 0) p.x = w;
+      if (p.x > w) p.x = 0;
+      if (p.y < 0) p.y = h;
+      if (p.y > h) p.y = 0;
+
+      ctx.beginPath();
+      ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
+      ctx.fillStyle = `rgba(0, 180, 216, ${p.a})`;
+      ctx.fill();
+    }
+
+    // Draw connections
+    for (let i = 0; i < particles.length; i++) {
+      for (let j = i + 1; j < particles.length; j++) {
+        const dx = particles[i].x - particles[j].x;
+        const dy = particles[i].y - particles[j].y;
+        const dist = Math.sqrt(dx * dx + dy * dy);
+        if (dist < 120) {
+          ctx.beginPath();
+          ctx.moveTo(particles[i].x, particles[i].y);
+          ctx.lineTo(particles[j].x, particles[j].y);
+          ctx.strokeStyle = `rgba(0, 180, 216, ${0.06 * (1 - dist / 120)})`;
+          ctx.lineWidth = 0.5;
+          ctx.stroke();
+        }
+      }
+    }
+
+    animId = requestAnimationFrame(draw);
+  }
+
+  resize();
+  createParticles();
+  draw();
+
+  window.addEventListener('resize', () => {
+    resize();
+    createParticles();
+  });
 }
 
 // ============================
@@ -350,15 +584,16 @@ async function fetchVoiceGreeting() {
     const contentType = res.headers.get('content-type') || '';
     debug('Greeting response content-type:', contentType);
 
+    const transcript = decodeURIComponent(res.headers.get('x-transcript') || '');
+
     if (contentType.includes('audio')) {
       const audioArrayBuffer = await res.arrayBuffer();
       const audioResponseBlob = new Blob([audioArrayBuffer], { type: 'audio/mpeg' });
-      addVoiceTranscript('alex', '(greeting)');
+      addVoiceTranscript('alex', transcript || 'Hi, welcome to AIVANTA!');
       await playAudio(audioResponseBlob);
     } else {
-      // Fallback: JSON text response
       const data = await res.json();
-      const text = data.response || data.output || data.text ||
+      const text = transcript || data.response || data.output || data.text ||
         "Hi, I'm Alex from AIVANTA. How can I help you today?";
       addVoiceTranscript('alex', text);
     }
@@ -367,28 +602,22 @@ async function fetchVoiceGreeting() {
   } catch (err) {
     debug('Greeting error:', err);
     setVoiceStatus('idle');
-    // Silent fail — user can still tap mic to start talking
   } finally {
     dom.btnMic.disabled = false;
   }
 }
 
 async function handleMicClick() {
-  ensureAudioContext(); // keep AudioContext alive on each user gesture
+  ensureAudioContext();
   const v = state.voice;
 
-  if (v.status === 'processing' || v.status === 'speaking') {
-    // Busy — ignore clicks
-    return;
-  }
+  if (v.status === 'processing' || v.status === 'speaking') return;
 
   if (v.status === 'recording') {
-    // Stop recording & send
     stopRecording();
     return;
   }
 
-  // Start recording
   try {
     await startRecording();
   } catch (err) {
@@ -400,14 +629,12 @@ async function handleMicClick() {
 async function startRecording() {
   const v = state.voice;
 
-  // Request mic access if we don't already have a stream
   if (!v.stream) {
     v.stream = await navigator.mediaDevices.getUserMedia({ audio: true });
   }
 
   v.audioChunks = [];
 
-  // Use webm if supported (ElevenLabs STT handles it), fallback to whatever is available
   const mimeType = MediaRecorder.isTypeSupported('audio/webm;codecs=opus')
     ? 'audio/webm;codecs=opus'
     : MediaRecorder.isTypeSupported('audio/webm')
@@ -442,9 +669,13 @@ function stopRecording() {
 
 async function sendVoiceMessage(audioBlob) {
   setVoiceStatus('processing');
+  addVoiceTranscript('you', '(sent voice message)');
+
+  const ack = getRandomAcknowledgment();
+  addVoiceTranscript('alex', ack);
+  playProcessingChime();
 
   try {
-    // Build form data with audio and session metadata
     const formData = new FormData();
     formData.append('file', audioBlob, 'recording.webm');
     formData.append('sessionId', state.sessionId);
@@ -461,29 +692,28 @@ async function sendVoiceMessage(audioBlob) {
 
     if (!res.ok) throw new Error(`Voice webhook status ${res.status}`);
 
-    // Response is audio/mpeg binary
     const contentType = res.headers.get('content-type') || '';
     debug('Voice response content-type:', contentType);
+
+    const transcript = decodeURIComponent(res.headers.get('x-transcript') || '');
+
+    removeLastAlexTranscript();
 
     if (contentType.includes('audio')) {
       const audioArrayBuffer = await res.arrayBuffer();
       const audioResponseBlob = new Blob([audioArrayBuffer], { type: 'audio/mpeg' });
-
-      // Add transcript entry for Alex (we don't get text back, so note it)
-      addVoiceTranscript('alex', '(audio response)');
-
-      // Play the audio response
+      addVoiceTranscript('alex', transcript || '(audio response)');
       await playAudio(audioResponseBlob);
     } else {
-      // Fallback: maybe it returned JSON with text
       const data = await res.json();
-      const text = data.response || data.output || data.text || 'Got a response';
+      const text = transcript || data.response || data.output || data.text || 'Got a response';
       addVoiceTranscript('alex', text);
     }
 
     setVoiceStatus('idle');
   } catch (err) {
     debug('Voice send error:', err);
+    removeLastAlexTranscript();
     setVoiceStatus('idle');
     showToast('Voice connection issue. Please try again.', 'error');
   }
@@ -526,7 +756,6 @@ function setVoiceStatus(status) {
   const btn = dom.btnMic;
   const hint = dom.micHint;
 
-  // Remove all state classes
   btn.classList.remove('recording', 'processing', 'speaking');
 
   switch (status) {
@@ -537,25 +766,37 @@ function setVoiceStatus(status) {
       break;
     case 'processing':
       btn.classList.add('processing');
-      dom.voiceStatus.textContent = 'Thinking...';
-      hint.textContent = 'Processing your message';
+      dom.voiceStatus.textContent = 'Alex is thinking...';
+      hint.textContent = 'Working on your response';
       break;
     case 'speaking':
       btn.classList.add('speaking');
       dom.voiceStatus.textContent = 'Alex is speaking';
       hint.textContent = '';
       break;
-    default: // idle
+    default:
       dom.voiceStatus.textContent = 'Tap the mic to speak';
       hint.textContent = 'Tap to start recording';
       break;
   }
 }
 
+function removeLastAlexTranscript() {
+  for (let i = state.voice.transcript.length - 1; i >= 0; i--) {
+    if (state.voice.transcript[i].role === 'alex') {
+      state.voice.transcript.splice(i, 1);
+      break;
+    }
+  }
+  const entries = dom.voiceTranscript.querySelectorAll('.voice-entry.alex');
+  if (entries.length > 0) {
+    entries[entries.length - 1].remove();
+  }
+}
+
 function addVoiceTranscript(role, text) {
   state.voice.transcript.push({ role, text });
 
-  // Hide placeholder
   if (dom.voicePlaceholder) dom.voicePlaceholder.style.display = 'none';
 
   const entry = document.createElement('div');
@@ -573,7 +814,6 @@ function addVoiceTranscript(role, text) {
   entry.appendChild(content);
   dom.voiceTranscript.appendChild(entry);
 
-  // Scroll transcript
   dom.voiceTranscript.scrollTop = dom.voiceTranscript.scrollHeight;
 }
 
@@ -598,12 +838,12 @@ function drawIdleCanvas() {
     const isSpeaking = v === 'speaking';
     const isProcessing = v === 'processing';
 
-    // Ring color based on state
-    let r = 39, g = 174, b = 96; // green
-    if (isRecording) { r = 231; g = 76; b = 60; } // red
-    if (isProcessing) { r = 52; g = 152; b = 219; } // blue
+    // Cyan accent color
+    let r = 0, g = 180, b = 216;
+    if (isRecording) { r = 231; g = 76; b = 60; }
+    if (isProcessing) { r = 0; g = 180; b = 216; }
+    if (isSpeaking) { r = 0; g = 214; b = 143; }
 
-    // Ring intensity
     const intensity = (isRecording || isSpeaking) ? 0.3 : 0.12;
     const speed = (isRecording || isSpeaking) ? 0.06 : 0.02;
     const amplitude = (isRecording || isSpeaking) ? 14 : 8;
@@ -619,7 +859,6 @@ function drawIdleCanvas() {
       ctx.stroke();
     }
 
-    // Center circle
     const coreR = 22 + Math.sin(frame * (speed * 1.5)) * (amplitude * 0.5);
     ctx.beginPath();
     ctx.arc(cx, cy, coreR, 0, Math.PI * 2);
@@ -629,7 +868,6 @@ function drawIdleCanvas() {
     ctx.lineWidth = 2;
     ctx.stroke();
 
-    // Processing spinner dots
     if (isProcessing) {
       for (let i = 0; i < 3; i++) {
         const angle = (frame * 0.05) + (i * Math.PI * 2 / 3);
@@ -637,7 +875,7 @@ function drawIdleCanvas() {
         const dy = cy + Math.sin(angle) * 45;
         ctx.beginPath();
         ctx.arc(dx, dy, 3, 0, Math.PI * 2);
-        ctx.fillStyle = `rgba(52, 152, 219, ${0.4 + Math.sin(frame * 0.1 + i) * 0.3})`;
+        ctx.fillStyle = `rgba(0, 180, 216, ${0.4 + Math.sin(frame * 0.1 + i) * 0.3})`;
         ctx.fill();
       }
     }
