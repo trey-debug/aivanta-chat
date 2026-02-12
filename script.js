@@ -145,6 +145,8 @@ function cacheDom() {
 
   // Nav
   dom.nav = document.getElementById('main-nav');
+  dom.navHamburger = document.getElementById('nav-hamburger');
+  dom.navActions = document.getElementById('nav-actions');
 
   // Hero particles
   dom.heroParticles = document.getElementById('hero-particles');
@@ -158,6 +160,34 @@ function init() {
   debug('AIVANTA initialized', { sessionId: state.sessionId });
 
   restoreSession();
+
+  // Mobile hamburger menu
+  if (dom.navHamburger) {
+    dom.navHamburger.addEventListener('click', () => {
+      const expanded = dom.navHamburger.getAttribute('aria-expanded') === 'true';
+      dom.navHamburger.setAttribute('aria-expanded', !expanded);
+      dom.navHamburger.classList.toggle('active');
+      dom.navActions.classList.toggle('nav-open');
+    });
+    // Close mobile nav when a link/button inside is clicked
+    dom.navActions.querySelectorAll('a, button').forEach(el => {
+      el.addEventListener('click', () => {
+        dom.navHamburger.setAttribute('aria-expanded', 'false');
+        dom.navHamburger.classList.remove('active');
+        dom.navActions.classList.remove('nav-open');
+      });
+    });
+    // Close mobile nav when clicking outside (on the backdrop)
+    document.addEventListener('click', (e) => {
+      if (dom.navActions.classList.contains('nav-open') &&
+          !dom.navActions.contains(e.target) &&
+          !dom.navHamburger.contains(e.target)) {
+        dom.navHamburger.setAttribute('aria-expanded', 'false');
+        dom.navHamburger.classList.remove('active');
+        dom.navActions.classList.remove('nav-open');
+      }
+    });
+  }
 
   // Navigation — open overlays
   dom.navTalk.addEventListener('click', () => openOverlay('text'));
