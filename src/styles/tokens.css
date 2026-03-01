@@ -1,0 +1,32 @@
+/* ============================================
+   AIVANTA Design Tokens
+   ============================================ */
+:root {
+  /* Colors */
+  --black:      #0A0A0A;
+  --off-black:  #111111;
+  --charcoal:   #1A1A1A;
+  --steel:      #2A2A2A;
+  --mid-gray:   #6B6B6B;
+  --light-gray: #A8A8A8;
+  --off-white:  #F5F4F0;
+  --white:      #FFFFFF;
+
+  --red:        #E02020;
+  --red-dark:   #B01818;
+  --red-muted:  rgba(224, 32, 32, 0.08);
+  --red-loss:   #C0392B;
+  --green:      #2ECC71;
+
+  /* Typography */
+  --font-display: 'Cormorant Garamond', Georgia, 'Times New Roman', serif;
+  --font-body:    'DM Sans', system-ui, -apple-system, sans-serif;
+
+  /* Spacing */
+  --container-max: 1200px;
+  --container-pad: clamp(1.25rem, 4vw, 3rem);
+
+  /* Transitions */
+  --ease-out: cubic-bezier(0.4, 0, 0.2, 1);
+  --duration: 0.3s;
+}

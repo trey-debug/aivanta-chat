@@ -1,0 +1,117 @@
+.footer {
+  background: var(--off-black);
+  border-top: 1px solid rgba(255, 255, 255, 0.06);
+  padding: 80px 0 40px;
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: 1.5fr 1fr 1fr 1fr;
+  gap: 3rem;
+  margin-bottom: 4rem;
+}
+
+/* Logo column */
+.logo {
+  font-family: var(--font-display);
+  font-size: 22px;
+  font-weight: 300;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--white);
+  display: block;
+  margin-bottom: 1rem;
+}
+.logoRed { color: var(--red); }
+
+.tagline {
+  font-family: var(--font-body);
+  font-size: 13px;
+  font-weight: 300;
+  color: var(--mid-gray);
+  line-height: 1.7;
+  max-width: 220px;
+}
+
+/* Nav columns */
+.col h4 {
+  font-family: var(--font-body);
+  font-size: 10px;
+  font-weight: 500;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: var(--mid-gray);
+  margin-bottom: 1.25rem;
+}
+
+.col ul {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 0.65rem;
+}
+
+.col a {
+  font-family: var(--font-body);
+  font-size: 13px;
+  font-weight: 300;
+  color: var(--light-gray);
+  text-decoration: none;
+  transition: color 0.2s;
+  cursor: pointer;
+}
+.col a:hover { color: var(--red); }
+
+/* Contact column */
+.contactInfo {
+  font-family: var(--font-body);
+  font-size: 13px;
+  font-weight: 300;
+  color: var(--light-gray);
+  line-height: 1.8;
+  margin-bottom: 1.25rem;
+}
+
+.bookBtn {
+  display: inline-block;
+  background: var(--red);
+  color: var(--white);
+  font-family: var(--font-body);
+  font-size: 11px;
+  font-weight: 500;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 0;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+.bookBtn:hover { background: var(--red-dark); }
+
+/* Bottom bar */
+.bottom {
+  border-top: 1px solid rgba(255, 255, 255, 0.06);
+  padding-top: 1.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+
+.copy, .byline {
+  font-family: var(--font-body);
+  font-size: 12px;
+  font-weight: 300;
+  color: var(--mid-gray);
+}
+
+/* Responsive */
+@media (max-width: 900px) {
+  .grid { grid-template-columns: 1fr 1fr; gap: 2rem; }
+}
+@media (max-width: 540px) {
+  .grid { grid-template-columns: 1fr; }
+  .bottom { flex-direction: column; align-items: flex-start; }
+}

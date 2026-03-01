@@ -1,0 +1,689 @@
+/* ============================================
+   Shared Inner Page Styles
+   ============================================ */
+
+/* ---- Page Hero ---- */
+.pageHero {
+  padding: 14rem 0 8rem;
+  background: var(--black);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+.pageHeroInner {
+  max-width: 860px;
+  padding: 0 var(--container-pad);
+}
+
+.pageEyebrow {
+  display: block;
+  font-family: var(--font-body);
+  font-size: 10px;
+  font-weight: 500;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--red);
+  margin-bottom: 1.25rem;
+}
+
+.pageHeadline {
+  font-family: var(--font-display);
+  font-size: clamp(3rem, 7vw, 5.5rem);
+  font-weight: 300;
+  color: var(--white);
+  line-height: 1.0;
+}
+
+.pageSubhead {
+  font-family: var(--font-display);
+  font-size: clamp(1.1rem, 2vw, 1.5rem);
+  font-weight: 300;
+  font-style: italic;
+  color: var(--red);
+  margin-top: 1rem;
+}
+
+/* ---- Page Sections ---- */
+.pageSection {
+  padding: 8rem 0;
+}
+
+.pageSectionAlt {
+  background: var(--off-black);
+}
+
+.sectionInner {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 0 var(--container-pad);
+}
+
+.sectionTitle {
+  font-family: var(--font-display);
+  font-size: clamp(2rem, 4vw, 3rem);
+  font-weight: 300;
+  color: var(--off-white);
+  margin-bottom: 2rem;
+  line-height: 1.15;
+}
+
+.sectionEyebrow {
+  display: block;
+  font-family: var(--font-body);
+  font-size: 10px;
+  font-weight: 500;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--red);
+  margin-bottom: 1rem;
+}
+
+.prose {
+  font-family: var(--font-body);
+  font-size: 15px;
+  font-weight: 300;
+  color: var(--light-gray);
+  line-height: 1.9;
+  max-width: 720px;
+}
+
+.prose p + p {
+  margin-top: 1.25rem;
+}
+
+/* ---- Values Grid ---- */
+.valuesGrid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 2px;
+  margin-top: 4rem;
+}
+
+.valueItem {
+  padding: 2.5rem 2rem;
+  border: 1px solid var(--steel);
+}
+
+.valueItem + .valueItem {
+  border-left: none;
+}
+
+.valueName {
+  font-family: var(--font-display);
+  font-size: 1.5rem;
+  font-weight: 300;
+  color: var(--red);
+  margin-bottom: 0.75rem;
+  display: block;
+}
+
+.valueDesc {
+  font-family: var(--font-body);
+  font-size: 13px;
+  font-weight: 300;
+  color: var(--mid-gray);
+  line-height: 1.8;
+}
+
+@media (max-width: 720px) {
+  .valuesGrid { grid-template-columns: 1fr; }
+  .valueItem + .valueItem { border-left: 1px solid var(--steel); border-top: none; }
+}
+
+/* ---- Two-column service layout ---- */
+.serviceRow {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 5rem;
+  align-items: center;
+  padding: 5rem 0;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+.serviceRow:last-child {
+  border-bottom: none;
+}
+
+.serviceRow.reversed .serviceText { order: 2; }
+.serviceRow.reversed .serviceAccent { order: 1; }
+
+.serviceText {}
+
+.serviceNum {
+  font-family: var(--font-display);
+  font-size: 4rem;
+  font-weight: 300;
+  color: var(--steel);
+  line-height: 1;
+  display: block;
+  margin-bottom: 0.25rem;
+}
+
+.serviceEyebrow {
+  display: block;
+  font-family: var(--font-body);
+  font-size: 10px;
+  font-weight: 500;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--red);
+  margin-bottom: 1rem;
+}
+
+.serviceTitle {
+  font-family: var(--font-display);
+  font-size: clamp(1.75rem, 3vw, 2.5rem);
+  font-weight: 300;
+  color: var(--off-white);
+  line-height: 1.15;
+  margin-bottom: 1.25rem;
+}
+
+.serviceDesc {
+  font-family: var(--font-body);
+  font-size: 14px;
+  font-weight: 300;
+  color: var(--light-gray);
+  line-height: 1.9;
+  margin-bottom: 1.5rem;
+}
+
+.serviceBullets {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.serviceBullets li {
+  font-family: var(--font-body);
+  font-size: 13px;
+  font-weight: 300;
+  color: var(--mid-gray);
+  padding-left: 1.25rem;
+  position: relative;
+}
+
+.serviceBullets li::before {
+  content: '—';
+  position: absolute;
+  left: 0;
+  color: var(--red);
+}
+
+.serviceAccent {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 240px;
+  color: var(--red);
+  opacity: 0.12;
+}
+
+.serviceAccentPlaceholder {
+  width: 100%;
+  min-height: 240px;
+  background: var(--charcoal);
+  border: 1px solid var(--steel);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.serviceAccentLabel {
+  font-family: var(--font-body);
+  font-size: 11px;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: var(--steel);
+}
+
+@media (max-width: 860px) {
+  .serviceRow { grid-template-columns: 1fr; gap: 2.5rem; }
+  .serviceRow.reversed .serviceText { order: 0; }
+  .serviceRow.reversed .serviceAccent { order: 0; }
+}
+
+/* ---- Timeline ---- */
+.timeline {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+  margin-top: 3rem;
+  border-left: 1px solid var(--steel);
+  padding-left: 2.5rem;
+  max-width: 720px;
+}
+
+.timelineItem {
+  position: relative;
+  padding-bottom: 3.5rem;
+}
+
+.timelineItem::before {
+  content: '';
+  position: absolute;
+  left: -2.5rem;
+  top: 0.4rem;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--red);
+  transform: translateX(-4px);
+}
+
+.timelinePhase {
+  display: block;
+  font-family: var(--font-body);
+  font-size: 10px;
+  font-weight: 500;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--red);
+  margin-bottom: 0.5rem;
+}
+
+.timelineTitle {
+  font-family: var(--font-display);
+  font-size: 1.75rem;
+  font-weight: 300;
+  color: var(--off-white);
+  line-height: 1.2;
+  margin-bottom: 0.75rem;
+}
+
+.timelineDesc {
+  font-family: var(--font-body);
+  font-size: 14px;
+  font-weight: 300;
+  color: var(--light-gray);
+  line-height: 1.8;
+}
+
+/* ---- Accordion ---- */
+.accordion {
+  border-top: 1px solid var(--steel);
+  max-width: 720px;
+}
+
+.accordionItem {
+  border-bottom: 1px solid var(--steel);
+}
+
+.accordionBtn {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1.5rem 0;
+  background: none;
+  border: none;
+  cursor: pointer;
+  text-align: left;
+  gap: 1rem;
+}
+
+.accordionTitle {
+  font-family: var(--font-body);
+  font-size: 15px;
+  font-weight: 400;
+  color: var(--off-white);
+  line-height: 1.4;
+}
+
+.accordionIcon {
+  flex-shrink: 0;
+  width: 18px;
+  height: 18px;
+  color: var(--red);
+  transition: transform 0.3s ease;
+}
+
+.accordionIconOpen {
+  transform: rotate(45deg);
+}
+
+.accordionBody {
+  font-family: var(--font-body);
+  font-size: 14px;
+  font-weight: 300;
+  color: var(--light-gray);
+  line-height: 1.8;
+  padding-bottom: 1.5rem;
+  overflow: hidden;
+}
+
+/* ---- Pricing Tier Cards ---- */
+.pricingGrid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1.5rem;
+  max-width: 1000px;
+  margin-top: 4rem;
+}
+
+.pricingCard {
+  border: 1px solid var(--steel);
+  padding: 2.5rem 2rem;
+  background: var(--charcoal);
+  position: relative;
+}
+
+.pricingCard.featured {
+  border-color: var(--red);
+  background: rgba(224, 32, 32, 0.04);
+}
+
+.pricingBadge {
+  position: absolute;
+  top: -13px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: var(--red);
+  color: var(--white);
+  font-family: var(--font-body);
+  font-size: 10px;
+  font-weight: 500;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  padding: 4px 14px;
+  white-space: nowrap;
+}
+
+.pricingTierName {
+  display: block;
+  font-family: var(--font-body);
+  font-size: 11px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--red);
+  margin-bottom: 0.4rem;
+}
+
+.pricingTarget {
+  display: block;
+  font-family: var(--font-body);
+  font-size: 12px;
+  color: var(--mid-gray);
+  margin-bottom: 1.25rem;
+}
+
+.pricingAmount {
+  font-family: var(--font-display);
+  font-size: 3.5rem;
+  font-weight: 300;
+  color: var(--white);
+  line-height: 1;
+}
+
+.pricingAmountSuffix {
+  font-family: var(--font-body);
+  font-size: 1rem;
+  color: var(--mid-gray);
+}
+
+.pricingSetup {
+  display: block;
+  font-family: var(--font-body);
+  font-size: 12px;
+  color: var(--mid-gray);
+  margin-top: 0.35rem;
+  margin-bottom: 2rem;
+}
+
+.pricingIncludes {
+  font-family: var(--font-body);
+  font-size: 10px;
+  font-weight: 500;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--mid-gray);
+  margin-bottom: 0.75rem;
+}
+
+.pricingFeatures {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  margin-bottom: 2rem;
+}
+
+.pricingFeatures li {
+  font-family: var(--font-body);
+  font-size: 13px;
+  font-weight: 300;
+  color: var(--light-gray);
+  padding-left: 1.25rem;
+  position: relative;
+}
+
+.pricingFeatures li::before {
+  content: '✓';
+  position: absolute;
+  left: 0;
+  color: var(--red);
+  font-size: 11px;
+}
+
+@media (max-width: 860px) {
+  .pricingGrid { grid-template-columns: 1fr; max-width: 420px; }
+}
+
+/* ---- Guarantee callout block (reused across pages) ---- */
+.guaranteeCallout {
+  border: 1px solid var(--steel);
+  padding: 3rem;
+  text-align: center;
+  max-width: 600px;
+  margin: 4rem auto 0;
+  position: relative;
+}
+
+.guaranteeCalloutNum {
+  font-family: var(--font-display);
+  font-size: clamp(3rem, 6vw, 5rem);
+  font-weight: 300;
+  color: var(--red);
+  line-height: 1;
+}
+
+.guaranteeCalloutTitle {
+  font-family: var(--font-display);
+  font-style: italic;
+  font-size: 1.25rem;
+  font-weight: 300;
+  color: var(--off-white);
+  margin: 0.5rem 0 1rem;
+}
+
+.guaranteeCalloutDesc {
+  font-family: var(--font-body);
+  font-size: 13px;
+  font-weight: 300;
+  color: var(--mid-gray);
+  line-height: 1.8;
+}
+
+/* ---- Contact Form (inline) ---- */
+.contactGrid {
+  display: grid;
+  grid-template-columns: 1fr 1.5fr;
+  gap: 6rem;
+  align-items: start;
+  max-width: 1000px;
+  margin: 0 auto;
+  padding: 0 var(--container-pad);
+}
+
+.contactInfo h3 {
+  font-family: var(--font-display);
+  font-size: 1.75rem;
+  font-weight: 300;
+  color: var(--off-white);
+  margin-bottom: 1.5rem;
+}
+
+.contactDetails {
+  font-family: var(--font-body);
+  font-size: 14px;
+  font-weight: 300;
+  color: var(--light-gray);
+  line-height: 2;
+}
+
+.contactDetails a {
+  color: var(--red);
+  text-decoration: none;
+}
+
+.contactDetails a:hover {
+  text-decoration: underline;
+}
+
+.inlineForm {}
+
+.formRow {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1.5rem;
+  margin-bottom: 1.5rem;
+}
+
+.formGroup {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.formGroup label {
+  font-family: var(--font-body);
+  font-size: 10px;
+  font-weight: 500;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--mid-gray);
+}
+
+.formGroup input,
+.formGroup select,
+.formGroup textarea {
+  background: transparent;
+  border: none;
+  border-bottom: 1px solid var(--steel);
+  color: var(--off-white);
+  font-family: var(--font-body);
+  font-size: 14px;
+  font-weight: 300;
+  padding: 0.6rem 0;
+  outline: none;
+  transition: border-color 0.2s;
+  width: 100%;
+}
+
+.formGroup input:focus,
+.formGroup select:focus,
+.formGroup textarea:focus {
+  border-bottom-color: var(--red);
+}
+
+.formGroup select option {
+  background: var(--charcoal);
+}
+
+.formGroup textarea {
+  resize: vertical;
+  min-height: 80px;
+}
+
+.formGroupFull {
+  margin-bottom: 2rem;
+}
+
+.submitBtn {
+  background: var(--red);
+  color: var(--white);
+  font-family: var(--font-body);
+  font-size: 11px;
+  font-weight: 500;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  padding: 14px 32px;
+  border: none;
+  border-radius: 0;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.submitBtn:hover { background: var(--red-dark); }
+.submitBtn:disabled { opacity: 0.5; cursor: not-allowed; }
+
+.formNote {
+  font-family: var(--font-body);
+  font-size: 12px;
+  font-weight: 300;
+  color: var(--mid-gray);
+  margin-top: 1rem;
+}
+
+.successState {
+  text-align: center;
+  padding: 3rem 0;
+}
+
+.successIcon {
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  background: var(--red);
+  color: var(--white);
+  font-size: 1.25rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto 1.5rem;
+}
+
+.successState h3 {
+  font-family: var(--font-display);
+  font-size: 2rem;
+  font-weight: 300;
+  color: var(--off-white);
+  margin-bottom: 1rem;
+}
+
+.successState p {
+  font-family: var(--font-body);
+  font-size: 14px;
+  font-weight: 300;
+  color: var(--light-gray);
+  line-height: 1.8;
+  max-width: 400px;
+  margin: 0 auto 1.5rem;
+}
+
+@media (max-width: 760px) {
+  .contactGrid { grid-template-columns: 1fr; gap: 3rem; }
+  .formRow { grid-template-columns: 1fr; }
+}
+
+/* ---- CTA Banner (used in About, Services) ---- */
+.ctaBanner {
+  text-align: center;
+  padding: 6rem 0;
+}
+
+.ctaBannerTitle {
+  font-family: var(--font-display);
+  font-size: clamp(2rem, 4vw, 3rem);
+  font-weight: 300;
+  color: var(--off-white);
+  margin-bottom: 1rem;
+}
+
+.ctaBannerSub {
+  font-family: var(--font-body);
+  font-size: 14px;
+  font-weight: 300;
+  color: var(--mid-gray);
+  margin-bottom: 2.5rem;
+}
