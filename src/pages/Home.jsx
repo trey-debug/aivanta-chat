@@ -280,7 +280,7 @@ export default function Home({ setOverlayOpen }) {
     const st = ScrollTrigger.create({
       trigger: solutionOuterRef.current,
       start: 'top top',
-      end: `+=${(totalCards - 1) * 100}vh`,
+      end: `+=${(totalCards - 1) * 150}vh`,
       pin: solutionStickyRef.current,
       scrub: 1,
       onUpdate: (self) => {
@@ -399,20 +399,21 @@ export default function Home({ setOverlayOpen }) {
 
         <div className={styles.heroContent} ref={heroContentRef}>
           <span className={styles.heroEyebrow} ref={heroEyebrowRef}>
-            Built Exclusively for Automotive Repair Shops
+            The Revenue Leak Every Shop Owner Ignores
           </span>
 
           <h1 className={styles.heroHeadline} ref={heroHeadlineRef}>
             <span className="hero-line" style={{ display: 'block' }}>
-              The 90-Day AI
+              The $74,000
             </span>
             <span className="hero-line" style={{ display: 'block' }}>
-              Supercharged Shop.
+              Tune-Up.
             </span>
           </h1>
 
           <p className={styles.heroSubheadline} ref={heroSubRef}>
-            Give your team their time back.
+            Your shop already earned it.<br />
+            Here's how to collect it.
           </p>
         </div>
 
@@ -483,6 +484,39 @@ export default function Home({ setOverlayOpen }) {
 
       <hr className={styles.rule} />
 
+      {/* Cinematic Break — Tech in Shop */}
+      <section className={styles.cinematicBreak}>
+        <img
+          src="https://res.cloudinary.com/dt9mabq2v/image/upload/v1772372027/pexels-cottonbro-4488639_tfmssl.jpg"
+          alt=""
+          className={styles.cinematicBreakImg}
+          aria-hidden="true"
+        />
+      </section>
+
+      {/* Turbo Bridge */}
+      <section className={styles.turboBridge}>
+        <img
+          src="https://res.cloudinary.com/dt9mabq2v/image/upload/v1772373255/pexels-jacobmooreimages-12330654_3_ds9b47.jpg"
+          alt=""
+          className={styles.turboBridgeBg}
+          aria-hidden="true"
+        />
+        <div className={styles.turboBridgeContent}>
+          <span className={styles.turboBridgeEyebrow}>The Solution</span>
+          <h2 className={styles.turboBridgeHeadline}>
+            The Boost Your<br />Shop Needs.
+          </h2>
+          <p className={styles.turboBridgeBody}>
+            Unlike a physical turbo, you don't have to touch your internals or overhaul your systems.
+            AIVANTA plugs directly into what you already run — and forces more revenue through
+            the same engine you've always had.
+          </p>
+        </div>
+      </section>
+
+      <hr className={styles.rule} />
+
       {/* =============================================
           SCENE 4: HORIZONTAL SCROLL — AI SOLUTIONS
           ============================================= */}
@@ -491,18 +525,18 @@ export default function Home({ setOverlayOpen }) {
           <div className={styles.solutionTrack} ref={solutionTrackRef}>
             {SOLUTIONS.map((sol, i) => (
               <div key={i} className={styles.solutionCard}>
-                <div className={styles.solutionCardBody}>
+                <div className={styles.solutionFlashCard}>
                   <span className={styles.solutionCardNum}>{sol.num}</span>
                   <span className={styles.solutionCardEyebrow}>{sol.eyebrow}</span>
                   <h2 className={styles.solutionCardTitle}>{sol.title}</h2>
                   <p className={styles.solutionCardDesc}>{sol.desc}</p>
+                  {sol.svg === 'engine' && (
+                    <EngineSVG className={styles.solutionCardSvg} width={80} height={60} />
+                  )}
+                  {sol.svg === 'transmission' && (
+                    <TransmissionSVG className={styles.solutionCardSvg} width={80} height={60} />
+                  )}
                 </div>
-                {sol.svg === 'engine' && (
-                  <EngineSVG className={styles.solutionCardSvg} width={200} height={150} />
-                )}
-                {sol.svg === 'transmission' && (
-                  <TransmissionSVG className={styles.solutionCardSvg} width={200} height={150} />
-                )}
               </div>
             ))}
           </div>

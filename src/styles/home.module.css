@@ -258,7 +258,7 @@
 
 /* ---- SCENE 4: HORIZONTAL SCROLL — SOLUTIONS ---- */
 .solutionOuter {
-  height: 600vh;
+  height: 700vh; /* 100vh sticky + 4 × 150vh scroll distance */
   position: relative;
 }
 
@@ -282,19 +282,24 @@
   height: 100%;
   display: flex;
   align-items: center;
-  padding: 0 clamp(2rem, 8vw, 10rem);
-  gap: 5rem;
+  justify-content: center;
+  padding: 2rem;
   flex-shrink: 0;
 }
 
-.solutionCardBody {
-  flex: 1;
-  max-width: 620px;
+/* Flash card container */
+.solutionFlashCard {
+  background: var(--charcoal);
+  border: 1px solid var(--steel);
+  padding: 2.75rem 2.5rem;
+  max-width: 480px;
+  width: 100%;
+  position: relative;
 }
 
 .solutionCardNum {
   font-family: var(--font-display);
-  font-size: clamp(5rem, 10vw, 8rem);
+  font-size: 2.5rem;
   font-weight: 300;
   color: var(--steel);
   line-height: 1;
@@ -315,26 +320,26 @@
 
 .solutionCardTitle {
   font-family: var(--font-display);
-  font-size: clamp(2rem, 4vw, 3.5rem);
+  font-size: clamp(1.75rem, 3vw, 2.5rem);
   font-weight: 300;
   color: var(--off-white);
   line-height: 1.1;
-  margin-bottom: 1.5rem;
+  margin-bottom: 1.25rem;
 }
 
 .solutionCardDesc {
   font-family: var(--font-body);
-  font-size: 15px;
+  font-size: 14px;
   font-weight: 300;
   color: var(--light-gray);
   line-height: 1.8;
-  max-width: 480px;
 }
 
 .solutionCardSvg {
-  flex: 0 0 auto;
+  display: block;
   color: var(--red);
   opacity: 0.12;
+  margin-top: 1.5rem;
 }
 
 .solutionDots {
@@ -609,4 +614,77 @@
   cursor: pointer;
   text-decoration: underline;
   padding: 0;
+}
+
+/* ---- CINEMATIC BREAK ---- */
+.cinematicBreak {
+  width: 100%;
+  height: 55vh;
+  overflow: hidden;
+  position: relative;
+}
+
+.cinematicBreakImg {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center 40%;
+  display: block;
+  filter: brightness(0.55);
+}
+
+/* ---- TURBO BRIDGE ---- */
+.turboBridge {
+  position: relative;
+  min-height: 65vh;
+  display: flex;
+  align-items: center;
+  overflow: hidden;
+}
+
+.turboBridgeBg {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center center;
+  filter: brightness(0.3);
+  display: block;
+}
+
+.turboBridgeContent {
+  position: relative;
+  z-index: 1;
+  padding: 6rem clamp(2rem, 8vw, 8rem);
+  max-width: 680px;
+}
+
+.turboBridgeEyebrow {
+  display: block;
+  font-family: var(--font-body);
+  font-size: 10px;
+  font-weight: 500;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--red);
+  margin-bottom: 1.25rem;
+}
+
+.turboBridgeHeadline {
+  font-family: var(--font-display);
+  font-size: clamp(2.5rem, 5vw, 4.5rem);
+  font-weight: 300;
+  color: var(--white);
+  line-height: 1.1;
+  margin-bottom: 1.75rem;
+}
+
+.turboBridgeBody {
+  font-family: var(--font-body);
+  font-size: 15px;
+  font-weight: 300;
+  color: rgba(255, 255, 255, 0.75);
+  line-height: 1.85;
+  max-width: 540px;
 }
