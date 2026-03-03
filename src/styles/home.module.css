@@ -100,7 +100,7 @@
 
 /* ---- SCENE 2: PAIN POINTS ---- */
 .painWrapper {
-  height: 600vh; /* 100vh + 500vh scroll distance */
+  height: 850vh; /* 100vh sticky + 750vh scroll distance (5 panels × 150vh) */
   position: relative;
 }
 

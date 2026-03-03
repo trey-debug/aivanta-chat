@@ -195,7 +195,7 @@ export default function Home({ setOverlayOpen }) {
     })
 
     const totalPanels    = PAIN_POINTS.length
-    const scrollDistance = (totalPanels - 1) * 100
+    const scrollDistance = totalPanels * 150  // 150vh per panel = 750vh total
 
     const splits = painPanelRefs.current.map(panel => {
       const el = panel.querySelector('[data-split]')
@@ -209,7 +209,7 @@ export default function Home({ setOverlayOpen }) {
       start: 'top top',
       end: `+=${scrollDistance}vh`,
       pin: painStickyRef.current,
-      scrub: 1,
+      scrub: 1.5,
       onUpdate: (self) => {
         const progress  = self.progress
         const panelIdx  = Math.min(Math.floor(progress * totalPanels), totalPanels - 1)
@@ -221,10 +221,11 @@ export default function Home({ setOverlayOpen }) {
           if (i < panelIdx) {
             gsap.set(panel, { opacity: 0, xPercent: -100 })
           } else if (i === panelIdx) {
-            if (panelProg < 0.2) {
-              gsap.set(panel, { opacity: 1, xPercent: (1 - panelProg / 0.2) * 80 })
-            } else if (panelProg > 0.8 && i < totalPanels - 1) {
-              gsap.set(panel, { opacity: 1 - (panelProg - 0.8) / 0.2, xPercent: -(panelProg - 0.8) / 0.2 * 80 })
+            // Slide in over first 12% of panel's scroll, lock for 76%, slide out over last 12%
+            if (panelProg < 0.12) {
+              gsap.set(panel, { opacity: 1, xPercent: (1 - panelProg / 0.12) * 80 })
+            } else if (panelProg > 0.88 && i < totalPanels - 1) {
+              gsap.set(panel, { opacity: 1 - (panelProg - 0.88) / 0.12, xPercent: -(panelProg - 0.88) / 0.12 * 80 })
             } else {
               gsap.set(panel, { opacity: 1, xPercent: 0 })
             }
