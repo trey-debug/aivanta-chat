@@ -229,7 +229,6 @@ export default function Home({ setOverlayOpen }) {
       trigger: painWrapperRef.current,
       start: 'top top',
       end: `+=${scrollDistance}vh`,
-      pin: painStickyRef.current,
       scrub: 1.5,
       onUpdate: (self) => {
         const progress  = self.progress
@@ -317,7 +316,6 @@ export default function Home({ setOverlayOpen }) {
       trigger: solutionOuterRef.current,
       start: 'top top',
       end: `+=${(totalCards - 1) * 750}vh`,
-      pin: solutionStickyRef.current,
       scrub: 1,
       onUpdate: (self) => {
         const xPct = self.progress * (totalCards - 1) * -100
