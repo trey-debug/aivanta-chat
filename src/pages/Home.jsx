@@ -195,7 +195,7 @@ export default function Home({ setOverlayOpen }) {
     })
 
     const totalPanels    = PAIN_POINTS.length
-    const scrollDistance = totalPanels * 150  // 150vh per panel = 750vh total
+    const scrollDistance = totalPanels * 750  // 750vh per panel = 3750vh total
 
     const splits = painPanelRefs.current.map(panel => {
       const el = panel.querySelector('[data-split]')
@@ -281,7 +281,7 @@ export default function Home({ setOverlayOpen }) {
     const st = ScrollTrigger.create({
       trigger: solutionOuterRef.current,
       start: 'top top',
-      end: `+=${(totalCards - 1) * 150}vh`,
+      end: `+=${(totalCards - 1) * 750}vh`,
       pin: solutionStickyRef.current,
       scrub: 1,
       onUpdate: (self) => {
