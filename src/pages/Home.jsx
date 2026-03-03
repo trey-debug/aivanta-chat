@@ -13,26 +13,31 @@ const PAIN_POINTS = [
     eyebrow: '01 / 05  ·  Scheduling',
     statement: 'Your phone rang while your advisor was with a customer. Nobody answered. That caller booked somewhere else.',
     keyPhrase: 'Nobody answered',
+    photoId: '6870321',
   },
   {
     eyebrow: '02 / 05  ·  Declined Services',
     statement: 'Ten customers declined services this week. Not one of them has heard from you since.',
     keyPhrase: 'Not one of them',
+    photoId: '4895417',
   },
   {
     eyebrow: '03 / 05  ·  Fleet Accounts',
     statement: "Your best fleet account got a call from a competitor yesterday. You haven't sent them a report in months.",
     keyPhrase: 'a competitor yesterday',
+    photoId: '12396171',
   },
   {
     eyebrow: '04 / 05  ·  Lapsed Customers',
     statement: "There are 340 customers in your CRM who haven't been back in over a year. They didn't leave. You just stopped talking to them.",
     keyPhrase: 'You just stopped talking to them',
+    photoId: '7144186',
   },
   {
     eyebrow: '05 / 05  ·  Inspection Videos',
     statement: "Your advisor watches every DVI video before calling the customer. That's 90 minutes of their day. Every day.",
     keyPhrase: '90 minutes of their day',
+    photoId: '8986036',
   },
 ]
 
@@ -52,6 +57,7 @@ const SOLUTIONS = [
     title: 'AI Scheduling Agent',
     desc: "Captures every call your team can't answer. Books the appointment, confirms it, and texts a reminder — automatically. No calls lost. No revenue leaked.",
     svg: 'engine',
+    photo: '6870324',
   },
   {
     num: '02',
@@ -59,6 +65,7 @@ const SOLUTIONS = [
     title: 'Declined Service Follow-Up',
     desc: "Every customer who said 'not today' gets a personalized follow-up sequence that brings them back — without lifting a finger. The AI tracks, times, and sends.",
     svg: null,
+    photo: '4895417',
   },
   {
     num: '03',
@@ -66,6 +73,7 @@ const SOLUTIONS = [
     title: 'Fleet Documentation Suite',
     desc: 'Automated monthly reports, service histories, and proactive communication that makes your fleet clients feel like VIPs — before a competitor calls them first.',
     svg: 'transmission',
+    photo: '12396171',
   },
   {
     num: '04',
@@ -73,6 +81,7 @@ const SOLUTIONS = [
     title: 'Customer Re-Engagement',
     desc: "Your dormant customers aren't gone — they're waiting to be asked back. The AI identifies them, finds the right moment, and sends a message that actually lands.",
     svg: null,
+    photo: '7144186',
   },
   {
     num: '05',
@@ -80,6 +89,7 @@ const SOLUTIONS = [
     title: 'DVI Video Summarizer',
     desc: 'Your advisor watches DVI videos. Our AI watches them first, summarizes the findings, and drafts the customer message in seconds — giving your team their time back.',
     svg: null,
+    photo: '6870309',
   },
 ]
 
@@ -114,6 +124,7 @@ export default function Home({ setOverlayOpen }) {
   // Scene 3 refs
   const numberRef        = useRef(null)
   const numberDisplayRef = useRef(null)
+  const numberBgRef      = useRef(null)
   const breakdownRefs    = useRef([])
 
   // Scene 4 refs
@@ -130,6 +141,7 @@ export default function Home({ setOverlayOpen }) {
   const foundingRef       = useRef(null)
   const foundingLeftRef   = useRef(null)
   const foundingRightRef  = useRef(null)
+  const foundingImgRef    = useRef(null)
 
   // Scene 7 refs
   const guaranteeRef      = useRef(null)
@@ -151,25 +163,32 @@ export default function Home({ setOverlayOpen }) {
   useEffect(() => {
     const eyebrow = heroEyebrowRef.current
     const sub     = heroSubRef.current
-    const lines   = heroHeadlineRef.current?.querySelectorAll('.hero-line')
 
+    // Eyebrow fades up
     gsap.fromTo(eyebrow,
-      { opacity: 0, y: 8 },
-      { opacity: 1, y: 0, duration: 0.5, delay: 0.2, ease: 'power2.out' }
+      { opacity: 0, y: 20 },
+      { opacity: 1, y: 0, duration: 0.6, delay: 0.3, ease: 'power3.out' }
     )
 
-    if (lines) {
-      gsap.fromTo(lines,
-        { opacity: 0, y: 40 },
-        { opacity: 1, y: 0, duration: 0.7, stagger: 0.1, delay: 0.4, ease: 'power3.out' }
-      )
+    // Headline: word-by-word staggered reveal
+    let headlineSplit = null
+    if (heroHeadlineRef.current) {
+      try {
+        headlineSplit = new SplitText(heroHeadlineRef.current, { type: 'words', wordsClass: 'hero-word' })
+        gsap.fromTo(headlineSplit.words,
+          { opacity: 0, y: 60 },
+          { opacity: 1, y: 0, duration: 0.7, stagger: 0.07, delay: 0.5, ease: 'power3.out' }
+        )
+      } catch { /* SplitText unavailable */ }
     }
 
+    // Subheadline fades in last
     gsap.fromTo(sub,
-      { opacity: 0 },
-      { opacity: 1, duration: 0.5, delay: 0.7, ease: 'power2.out' }
+      { opacity: 0, y: 16 },
+      { opacity: 1, y: 0, duration: 0.6, delay: 1.0, ease: 'power2.out' }
     )
 
+    // Parallax fade-out as hero scrolls away
     if (heroContentRef.current) {
       ScrollTrigger.create({
         trigger: heroContentRef.current,
@@ -184,6 +203,8 @@ export default function Home({ setOverlayOpen }) {
         },
       })
     }
+
+    return () => headlineSplit?.revert()
   }, [])
 
   // ---- Scene 2: Pain Points (pinned scroll) ----
@@ -246,6 +267,20 @@ export default function Home({ setOverlayOpen }) {
   useEffect(() => {
     if (!numberDisplayRef.current || !numberRef.current) return
 
+    // Background parallax
+    if (numberBgRef.current) {
+      gsap.to(numberBgRef.current, {
+        yPercent: -18,
+        ease: 'none',
+        scrollTrigger: {
+          trigger: numberRef.current,
+          start: 'top bottom',
+          end: 'bottom top',
+          scrub: true,
+        },
+      })
+    }
+
     const counter = { val: 0 }
     const st = ScrollTrigger.create({
       trigger: numberRef.current,
@@ -254,7 +289,7 @@ export default function Home({ setOverlayOpen }) {
       onEnter: () => {
         gsap.to(counter, {
           val: 74000,
-          duration: 2,
+          duration: 1.8,
           ease: 'power2.out',
           onUpdate: () => {
             if (numberDisplayRef.current) {
@@ -349,6 +384,20 @@ export default function Home({ setOverlayOpen }) {
         scrollTrigger: { trigger: foundingRef.current, start: 'top 65%', once: true },
       }
     )
+
+    // Subtle parallax on founder image
+    if (foundingImgRef.current) {
+      gsap.to(foundingImgRef.current, {
+        yPercent: -10,
+        ease: 'none',
+        scrollTrigger: {
+          trigger: foundingRef.current,
+          start: 'top bottom',
+          end: 'bottom top',
+          scrub: true,
+        },
+      })
+    }
   }, [])
 
   // ---- Scene 7: Guarantee border sweep ----
@@ -394,6 +443,13 @@ export default function Home({ setOverlayOpen }) {
           SCENE 1: HERO
           ============================================= */}
       <section id="hero" className={styles.hero}>
+        <img
+          src="https://images.pexels.com/photos/9028761/pexels-photo-9028761.jpeg?auto=compress&cs=tinysrgb&w=1920&q=90"
+          alt=""
+          className={styles.heroBg}
+          aria-hidden="true"
+        />
+        <div className={styles.heroOverlay} />
         <div className={styles.rivePlaceholder} aria-hidden="true">
           {/* HERO ANIMATION PLACEHOLDER — Rive asset will be inserted here */}
         </div>
@@ -437,6 +493,13 @@ export default function Home({ setOverlayOpen }) {
               className={styles.painPanel}
               ref={el => { painPanelRefs.current[i] = el }}
             >
+              <img
+                src={`https://images.pexels.com/photos/${point.photoId}/pexels-photo-${point.photoId}.jpeg?auto=compress&cs=tinysrgb&w=1920&q=90`}
+                alt=""
+                className={styles.painPanelBg}
+                aria-hidden="true"
+              />
+              <div className={styles.painPanelOverlay} />
               <span className={styles.painEyebrow}>{point.eyebrow}</span>
               <p className={styles.painStatement} data-split="true">
                 {renderStatement(point.statement, point.keyPhrase)}
@@ -461,25 +524,35 @@ export default function Home({ setOverlayOpen }) {
           SCENE 3: THE NUMBER
           ============================================= */}
       <section className={styles.numberScene} ref={numberRef}>
-        <p ref={numberDisplayRef} className={styles.bigNumber} aria-label="$74,000">
-          $0
-        </p>
+        <img
+          src="https://images.pexels.com/photos/4488642/pexels-photo-4488642.jpeg?auto=compress&cs=tinysrgb&w=1920&q=90"
+          alt=""
+          className={styles.numberBg}
+          ref={numberBgRef}
+          aria-hidden="true"
+        />
+        <div className={styles.numberOverlay} />
+        <div className={styles.numberContent}>
+          <p ref={numberDisplayRef} className={styles.bigNumber} aria-label="$74,000">
+            $0
+          </p>
 
-        <p className={styles.numberSub}>
-          The average independent shop loses this every year. Silently.
-        </p>
+          <p className={styles.numberSub}>
+            The average independent shop loses this every year. Silently.
+          </p>
 
-        <div className={styles.breakdownGrid}>
-          {BREAKDOWN.map((item, i) => (
-            <div
-              key={i}
-              className={styles.breakdownItem}
-              ref={el => { breakdownRefs.current[i] = el }}
-            >
-              <span className={styles.breakdownAmount}>{item.amount}</span>
-              <span className={styles.breakdownDesc}>{item.desc}</span>
-            </div>
-          ))}
+          <div className={styles.breakdownGrid}>
+            {BREAKDOWN.map((item, i) => (
+              <div
+                key={i}
+                className={styles.breakdownItem}
+                ref={el => { breakdownRefs.current[i] = el }}
+              >
+                <span className={styles.breakdownAmount}>{item.amount}</span>
+                <span className={styles.breakdownDesc}>{item.desc}</span>
+              </div>
+            ))}
+          </div>
         </div>
       </section>
 
@@ -527,6 +600,15 @@ export default function Home({ setOverlayOpen }) {
             {SOLUTIONS.map((sol, i) => (
               <div key={i} className={styles.solutionCard}>
                 <div className={styles.solutionFlashCard}>
+                  {sol.photo && (
+                    <div className={styles.solutionCardImg}>
+                      <img
+                        src={`https://images.pexels.com/photos/${sol.photo}/pexels-photo-${sol.photo}.jpeg?auto=compress&cs=tinysrgb&w=800&q=85`}
+                        alt=""
+                        className={styles.solutionCardImgEl}
+                      />
+                    </div>
+                  )}
                   <span className={styles.solutionCardNum}>{sol.num}</span>
                   <span className={styles.solutionCardEyebrow}>{sol.eyebrow}</span>
                   <h2 className={styles.solutionCardTitle}>{sol.title}</h2>
@@ -577,8 +659,13 @@ export default function Home({ setOverlayOpen }) {
       <section id="process" className={styles.foundingSection} ref={foundingRef}>
         <div className={styles.foundingGrid}>
           <div className={styles.foundingLeft} ref={foundingLeftRef}>
-            <div className={styles.foundingImagePlaceholder}>
-              <span className={styles.foundingImageLabel}>Founder Photo</span>
+            <div className={styles.foundingImageWrap}>
+              <img
+                src="https://images.pexels.com/photos/28611519/pexels-photo-28611519.jpeg?auto=compress&cs=tinysrgb&w=1200&q=90"
+                alt="Classic orange BMW in a shop — Trey's technician roots"
+                className={styles.foundingImageEl}
+                ref={foundingImgRef}
+              />
             </div>
           </div>
 
@@ -612,6 +699,13 @@ export default function Home({ setOverlayOpen }) {
           SCENE 7: THE GUARANTEE
           ============================================= */}
       <section className={styles.guaranteeSection} ref={guaranteeRef}>
+        <img
+          src="https://images.pexels.com/photos/4488637/pexels-photo-4488637.jpeg?auto=compress&cs=tinysrgb&w=1920&q=90"
+          alt=""
+          className={styles.guaranteeSectionBg}
+          aria-hidden="true"
+        />
+        <div className={styles.guaranteeSectionOverlay} />
         <div className={styles.guaranteeBoxWrap}>
           <div className={styles.guaranteeBox}>
             <div className={styles.guaranteeBorder} ref={guaranteeBorderRef} />
